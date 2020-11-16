@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-    <id>contactdescription</id>
+    <id>contact_description</id>
     <name>Contact Description</name>
     <summary>Describe and classify your contacts</summary>
     <description><![CDATA[Describe and classify your contacts to remember.]]></description>
@@ -17,7 +17,7 @@
     <navigations>
         <navigation>
             <name>Contact Description</name>
-            <route>contactdescription.page.index</route>
+            <route>contact_description.page.index</route>
         </navigation>
     </navigations>
 </info>

@@ -1,6 +1,9 @@
 <?php
-script('contactdescription', 'script');
-style('contactdescription', 'style');
+script('contact_description', 'script');
+script('contact_description', 'TagForm');
+script('contact_description', 'UserForm');
+style('contact_description', 'style');
+style('contact_description', 'markdown');
 ?>
 
 <div id="app">

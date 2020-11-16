@@ -10,6 +10,19 @@
 return [
     'routes' => [
 	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	   ['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
+       ['name' => 'contact#search', 'url' => '/search/{search}', 'verb' => 'GET'],
+       ['name' => 'contact#list', 'url' => '/list/{id}', 'verb' => 'GET'],
+
+       ['name' => 'contact#index', 'url' => '/contact', 'verb' => 'GET'],
+       ['name' => 'contact#show', 'url' => '/contact/{id}', 'verb' => 'GET'],
+       ['name' => 'contact#create', 'url' => '/contact', 'verb' => 'POST'],
+       ['name' => 'contact#update', 'url' => '/contact/{id}', 'verb' => 'PUT'],
+       ['name' => 'contact#destroy', 'url' => '/contact/{id}', 'verb' => 'DELETE'],
+
+       ['name' => 'tag#index', 'url' => '/tag', 'verb' => 'GET'],
+       ['name' => 'tag#create', 'url' => '/tag', 'verb' => 'POST'],
+       ['name' => 'tag#favorite', 'url' => '/tagfavorite/{id}', 'verb' => 'PUT'],
+       ['name' => 'tag#update', 'url' => '/tag/{id}', 'verb' => 'PUT'],
+       ['name' => 'tag#destroy', 'url' => '/tag/{id}', 'verb' => 'DELETE'],
     ]
 ];

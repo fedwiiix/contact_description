@@ -1,3 +1,144 @@
-#hello {
-	color: red;
+#app {
+    width: 100%;
+}
+
+#contact-list {
+    min-width: 300px;
+}
+
+
+/********** contact-form ***********/
+
+label {
+    opacity: 0.57;
+}
+
+#contact-form,
+#contact-preview {
+    width: 90%;
+    margin: calc(5% + 20px);
+    display: none;
+}
+
+#contact-form input:not([type="checkbox"]),
+#contact-form textarea {
+    width: 95%;
+}
+
+#contact-form textarea {
+    resize: vertical;
+    width: 100%;
+}
+
+#contact-preview p {
+    width: 100%;
+    padding: 10px;
+}
+
+#checkboxNotif {
+    margin: 30px 20px;
+}
+
+#checkboxNotif label {
+    opacity: 1;
+}
+
+#checkboxNotif input[type='checkbox'].checkbox:disabled+label:before {
+    /*background-color: var(--color-main-background)!important;*/
+    border-color: var(--color-primary-element)!important;
+}
+
+#contact-form-close,
+#preview-setting {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    cursor: pointer;
+}
+
+#preview-menu {
+    position: absolute;
+    right: calc(5% - 15px);
+    top: calc(5% + 40px);
+}
+
+
+/********** pseudo bootstrap ***********/
+
+.col {
+    display: inline-block;
+}
+
+.col-6 {
+    display: inline-block;
+    width: calc(50% - 2px);
+    vertical-align: top;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.ml-50 {
+    margin-left: 50px;
+}
+
+.mr-50 {
+    margin-right: 50px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .col-6 {
+        width: 100%;
+    }
+}
+
+
+/********** toast ***********/
+
+#toast {
+    /*display: none;*/
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: -60px;
+    font-size: 17px;
+}
+
+#toast button {
+    background-color: #333;
+    color: #fff;
+    margin-left: 15px;
+}
+
+.app-navigation-entry-menu {
+    margin-right: 15px;
+}
+
+#tag-create-form {
+    margin: 14px 0 14px 14px;
+}
+
+.tag-edit-form {
+    margin: 0 3px 8px 8px;
+}
+
+.tag-edit-form input[type='submit'] {
+    left: -5px;
+    position: relative;
+}
+
+.hidden {
+    display: none!important;
 }

@@ -25,7 +25,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index() {
-		return new TemplateResponse('contactdescription', 'index');  // templates/index.php
+		return new TemplateResponse('contact_description', 'index');  // templates/index.php
 	}
 
 }

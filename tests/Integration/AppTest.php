@@ -17,13 +17,13 @@ class AppTest extends TestCase {
 
     public function setUp() {
         parent::setUp();
-        $app = new App('contactdescription');
+        $app = new App('contact_description');
         $this->container = $app->getContainer();
     }
 
     public function testAppInstalled() {
         $appManager = $this->container->query('OCP\App\IAppManager');
-        $this->assertTrue($appManager->isInstalled('contactdescription'));
+        $this->assertTrue($appManager->isInstalled('contact_description'));
     }
 
 }
