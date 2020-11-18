@@ -20,7 +20,7 @@ class TagFormClass {
     getAndDisplayTags() {
         var self = this;
         $.ajax({
-            url: this.baseUrl + '/tag',
+            url: this.baseUrl + '/taglist',
             type: 'GET',
             contentType: 'application/json',
         }).done(function(response) {
@@ -29,7 +29,9 @@ class TagFormClass {
                     self.displayTag(element)
                 });
             }
-        }).fail(function(response, code) {});
+        }).fail(function(response, code) {
+            toast("An error occurred.", 4);
+        });
     }
 
 
@@ -38,7 +40,7 @@ class TagFormClass {
             <a href="#"><span id="label-tag-${element.id}">${element.tagName}</span>
                 <div class="app-navigation-entry-utils">
                     <ul>
-                        <li class="app-navigation-entry-utils-counter">1</li>
+                        <li class="app-navigation-entry-utils-counter">${element.count==0?'':element.count}</li>
                         <li class="app-navigation-entry-utils-menu-button" id="tag-open-menu-${element.id}">
                             <button></button>
                         </li>
@@ -210,7 +212,7 @@ class TagFormClass {
     }
 
     removeTag(id) {
-        $(`#tag-${id}`).remove()
+        $(`#tag-${id}`).remove().unbind();
     }
 
 }

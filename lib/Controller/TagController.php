@@ -34,6 +34,14 @@ class TagController extends Controller {
 
     /**
      * @NoAdminRequired
+     */
+    public function list()
+    {
+        return new DataResponse($this->mapper->findList($this->userId));
+    }
+
+    /**
+     * @NoAdminRequired
      *
      * @param string $tagName
      */

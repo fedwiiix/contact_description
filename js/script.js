@@ -2,6 +2,8 @@ $(function() {
 
     TagForm.init()
     UserForm.init()
+    TagAssign.init()
+
 });
 
 /******************* toast */

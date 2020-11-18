@@ -20,9 +20,16 @@ return [
        ['name' => 'contact#destroy', 'url' => '/contact/{id}', 'verb' => 'DELETE'],
 
        ['name' => 'tag#index', 'url' => '/tag', 'verb' => 'GET'],
+       ['name' => 'tag#list', 'url' => '/taglist', 'verb' => 'GET'],
        ['name' => 'tag#create', 'url' => '/tag', 'verb' => 'POST'],
        ['name' => 'tag#favorite', 'url' => '/tagfavorite/{id}', 'verb' => 'PUT'],
        ['name' => 'tag#update', 'url' => '/tag/{id}', 'verb' => 'PUT'],
        ['name' => 'tag#destroy', 'url' => '/tag/{id}', 'verb' => 'DELETE'],
+
+       ['name' => 'tagassign#index', 'url' => '/tagassign', 'verb' => 'GET'],
+       ['name' => 'tagassign#show', 'url' => '/tagassign/{id}', 'verb' => 'GET'],
+       ['name' => 'tagassign#create', 'url' => '/tagassign', 'verb' => 'POST'],
+       ['name' => 'tagassign#destroy', 'url' => '/tagassign', 'verb' => 'DELETE'],
+
     ]
 ];

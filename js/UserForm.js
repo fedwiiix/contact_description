@@ -15,6 +15,7 @@ class UserFormClass {
         this.showAll()
         this.initPreviewMenu()
         this.initForm()
+        this.initSearch()
     }
 
     initPreviewMenu() {
@@ -55,6 +56,31 @@ class UserFormClass {
             else
                 self.update(self.getFormToContact())
         });
+    }
+
+    initSearch() {
+        $('#contact-seach input').on('input', function() {
+
+            let value = $(this).val().toLowerCase();
+            if (value) {
+                $("#contact-list a").each(function() {
+                    if ($(this).find('.app-content-list-item-line-one').html().toLowerCase().indexOf(value) == -1) {
+                        $(this).hide()
+                    } else {
+                        $(this).show()
+                    }
+                });
+            } else {
+                $("#contact-list a").show()
+            }
+        });
+
+    }
+
+    /******************** currentId */
+
+    getCurrentId() {
+        return this.currentId;
     }
 
     /******************* form */
@@ -111,7 +137,7 @@ class UserFormClass {
         return json
     }
 
-    /****************************** */
+    /************************** display contact **** */
 
     showAll() {
         var self = this;
@@ -126,7 +152,9 @@ class UserFormClass {
                 });
                 self.displayFirstContact()
             }
-        }).fail(function(response, code) {});
+        }).fail(function(response, code) {
+            toast("An error occurred.", 4);
+        });
     }
 
     generateContactList(contact) {
@@ -140,17 +168,21 @@ class UserFormClass {
                 </a>`
     }
 
+    addContactListEvent(id) {
+        var self = this;
+        $(`#contact-${id}`).click(function() {
+            self.displayContactPreview(id)
+        })
+    }
+
     displayContactList(contact) {
         $('#contact-list').prepend(this.generateContactList(contact))
-
-        var self = this;
-        $(`#contact-${contact.id}`).click(function() {
-            self.displayContactPreview(contact.id)
-        })
+        this.addContactListEvent(contact.id)
     }
 
     updateContactList(contact) {
         $(`#contact-${contact.id}`).replaceWith(this.generateContactList(contact))
+        this.addContactListEvent(contact.id)
     }
 
     displayContactPreview(id) {
@@ -158,6 +190,7 @@ class UserFormClass {
         this.show(id, function(contact) {
             self.addContactToPreview(contact)
         })
+        this.showTags(id)
     }
 
     displayFirstContact() {
@@ -175,8 +208,12 @@ class UserFormClass {
             contentType: 'application/json',
         }).done(function(response) {
             callback(response)
-        }).fail(function(response, code) {});
+        }).fail(function(response, code) {
+            toast("An error occurred.", 4);
+        });
     }
+
+    /************************** CRUD **** */
 
     create(contact) {
         if (this.validContact(contact)) { return; }
@@ -239,7 +276,13 @@ class UserFormClass {
     }
 
     removeContact(id) {
-        $(`#contact-${id}`).remove()
+        $(`#contact-${id}`).remove().unbind();
+    }
+
+    /********************************* */
+
+    showTags(id) {
+        TagAssign.show(id)
     }
 
 }

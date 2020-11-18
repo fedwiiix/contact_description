@@ -1,6 +1,28 @@
-<div class="app-content-list" id="contact-list"></div>
+<div class="app-content-list">
+    <div id="contact-seach">
+        <input type="search" placeholder="Search">
+    </div>
+    <div id="contact-list"></div>
+</div>
 
 <section id="contact-preview">
+
+  
+
+    <form id="tag-assign-form" class="autocomplete">
+        <input id="assign-tag" type="text" placeholder="tag" autocomplete="off">
+        <input type="submit" value="" class="icon-confirm">
+    </form>
+  
+    <div id="tag-assigned-list">
+        
+        
+    </div>
+
+
+
+
+
     <div>
         <span class="icon-more" id="preview-setting"></span>
         <div class="popovermenu" id="preview-menu">

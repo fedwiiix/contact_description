@@ -40,6 +40,7 @@ class ContactController extends Controller {
      */
     public function list(string $genre, int $page)
     {
+        //return new DataResponse($this->mapper->findList($this->userId));
         /*if($genre=="all"){
             return new DataResponse($this->mapper->findAll($this->userId, $page));
         }else if($genre=="listed"){

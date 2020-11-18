@@ -16,7 +16,7 @@
     </dependencies>
     <navigations>
         <navigation>
-            <name>Contact Description</name>
+            <name>Contacts</name>
             <route>contact_description.page.index</route>
         </navigation>
     </navigations>

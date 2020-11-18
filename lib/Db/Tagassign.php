@@ -5,21 +5,19 @@ use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 
-class Tag extends Entity implements JsonSerializable {
+class Tagassign extends Entity implements JsonSerializable {
 
     public $id;
-    protected $userId;
+    protected $contactId;
+    protected $tagId;
     protected $tagName;
-    protected $favorite;
-    protected $count;
 
     public function jsonSerialize() {
         return [
             'id' => $this->id,
-            'userId' => $this->userId,
+            'contactId' => $this->contactId,
+            'tagId' => $this->tagId,
             'tagName' => $this->tagName,
-            'favorite' => $this->favorite,
-            'count' => $this->count,
         ];
     }
 }
