@@ -1,5 +1,5 @@
 <?php
-namespace OCA\ContactDescription\Db;
+namespace OCA\People\Db;
 
 use JsonSerializable;
 

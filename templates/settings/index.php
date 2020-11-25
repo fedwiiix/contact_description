@@ -1,16 +1,27 @@
 <div id="app-settings">
 	<div id="app-settings-header">
-		<button class="settings-button" data-apps-slide-toggle="#app-settings-content">Tags</button>
+		<button class="settings-button" data-apps-slide-toggle="#app-settings-content">Settings</button>
 	</div>
 	<div id="app-settings-content">
 		<div class="settings-block">
-			<p class="settings-hint">
-				<label for="newTag">Add new tag</label>
-			</p>
-			<form id="tag-insert-form">
-				<input id="new-tag" type="text" name="newTag" placeholder="tag" style="width:auto;">
-				<input type="submit" value="" class="icon-confirm" style="vertical-align: bottom; position:relative; left:-5px;">
-			</form>
+			<ul>
+				<li>
+					<a href="#" id="import-file" class="icon-confirm">
+						<label for="import-file-input">Import contact</label>
+						<input hidden type="file" id="import-file-input" multiple>
+					</a>
+				</li>
+				<li>
+					<a href="#" id="export-json-file" class="icon-external">
+						<label >export to json file</label>
+					</a>
+				</li>
+				<li>
+					<a href="#" id="export-csv-file" class="icon-external">
+						<label >export files to csv file</label>
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>

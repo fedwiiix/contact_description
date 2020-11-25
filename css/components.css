@@ -12,7 +12,7 @@
 /************* color picker **/
 
 .colorpicker ul {
-    display: block!important;
+    display: block !important;
 }
 
 .colorpicker li,
@@ -80,7 +80,7 @@
     margin: 0 2px;
     border-radius: 50%;
     overflow: hidden;
-    color: #fff!important;
+    color: #fff !important;
     transition: 0.5s;
 }
 
@@ -128,9 +128,13 @@ label {
     opacity: 1;
 }
 
-#checkboxNotif input[type='checkbox'].checkbox:disabled+label:before {
-    /*background-color: var(--color-main-background)!important;*/
-    border-color: var(--color-primary-element)!important;
+#checkboxNotif input[type="checkbox"].checkbox:disabled+label:before {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border-color: var(--color-primary-element) !important;
+}
+
+#checkboxNotif input[type="checkbox"].checkbox:disabled:checked+label:before {
+    background-color: var(--color-primary-element) !important;
 }
 
 #contact-form-close,
@@ -186,7 +190,7 @@ label {
 }
 
 #tag-assign-form input[type="submit"] {
-    border-radius: 0 25px 25px 0!important;
+    border-radius: 0 25px 25px 0 !important;
 }
 
 
@@ -201,7 +205,7 @@ label {
     width: 200px;
 }
 
-.autocomplete input[type=submit] {
+.autocomplete input[type="submit"] {
     vertical-align: bottom;
     position: relative;
     left: -5px;
@@ -245,4 +249,15 @@ label {
 .autocomplete-active {
     background-color: var(--color-primary);
     color: #ffffff;
+}
+
+
+/**************************************************/
+
+.settings-block a {
+    background-position: left;
+    padding: 5px;
+    padding-left: 30px;
+    vertical-align: top;
+    display: inline-block;
 }

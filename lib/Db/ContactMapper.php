@@ -1,5 +1,5 @@
 <?php
-namespace OCA\ContactDescription\Db;
+namespace OCA\People\Db;
 
 use OCP\IDbConnection;
 use OCP\AppFramework\Db\QBMapper;
@@ -7,12 +7,19 @@ use OCP\AppFramework\Db\QBMapper;
 class ContactMapper extends QBMapper {
 
     public function __construct(IDbConnection $db) {
-        parent::__construct($db, 'contact_description', Contact::class);
+        parent::__construct($db, 'people', Contact::class);
     }
 
     public function find(int $id, string $userId) {
         $qb = $this->db->getQueryBuilder();
-        $qb->select('*')
+        $qb->select('id')
+            ->addSelect('name')
+            ->addSelect('last_name')
+            ->addSelect('work')
+            ->addSelect('hobbies')
+            ->addSelect('birth')
+            ->addSelect('birth_notif')
+            ->addSelect('description')
             ->from($this->getTableName())
             ->where($qb->expr()->eq('id', $qb->createNamedParameter($id)))
             ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
@@ -24,10 +31,31 @@ class ContactMapper extends QBMapper {
     public function findAll(string $userId) {
         $qb = $this->db->getQueryBuilder();
 
-        $qb->select('id`, name, last_name, `created')
-           ->from($this->getTableName())
-           ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
-           ->orderBy('created', 'ASC');
+        $qb->select('id')
+            ->addSelect('name')
+            ->addSelect('last_name')
+            ->addSelect('created')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
+            ->orderBy('created', 'ASC');
+
+        return $this->findEntities($qb);
+    }
+
+    public function export(string $userId) {
+        $qb = $this->db->getQueryBuilder();
+
+        $qb->select('id')
+            ->addSelect('name')
+            ->addSelect('last_name')
+            ->addSelect('work')
+            ->addSelect('hobbies')
+            ->addSelect('birth')
+            ->addSelect('birth_notif')
+            ->addSelect('description')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
+            ->orderBy('created', 'ASC');
 
         return $this->findEntities($qb);
     }

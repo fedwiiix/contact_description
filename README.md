@@ -1,2 +1,2 @@
-# contact_description
+# people
 Describe and classify your contacts

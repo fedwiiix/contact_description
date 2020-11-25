@@ -1,192 +1,184 @@
 class TagAssignClass {
-
     constructor() {
-        this.baseUrl = OC.generateUrl('/apps/contact_description');
-        this.tagList = [];
         this.assignedId = [];
-        this.autocompleteList = []
     }
 
     init() {
-
-        this.initAutocomplete()
-        this.initForm()
-
+        this.initForm();
+        this.initAutocomplete();
     }
+
+    /******************************** autocomplete when assign tags */
 
     initAutocomplete() {
-        var self = this;
-        $.ajax({
-            url: this.baseUrl + '/tag',
-            type: 'GET',
-            contentType: 'application/json',
-        }).done(function(response) {
-            self.tagList = response;
-            self.autocompleteList = []
-            response.forEach(tag => {
-                self.autocompleteList.push(tag.name)
-            });
-            autocomplete(document.getElementById("assign-tag"), self.autocompleteList);
-        }).fail(function(response, code) {
-            toast("An error occurred.", 4);
-        });
+        autocomplete(document.getElementById("assign-tag"));
     }
 
+    getAssignedId() {
+        return this.assignedId
+    }
+
+    /****************************************** create tag */
+
     initForm() {
+        $("#tag-assign-form").submit((event) => {
+            event.preventDefault();
+            let inputTagName = $("#tag-assign-form #assign-tag").val();
 
-        var self = this;
-        $("#tag-assign-form").submit(function(event) {
-            event.preventDefault()
-            let inputTagName = $("#tag-assign-form #assign-tag").val()
-
-            self.isAssigned(inputTagName, function(tagListElement) {
-                self.create(tagListElement.id, function(tag) {
-                    // give name
-                    tag.name = tagListElement.name
-                    tag.color = tagListElement.color
-                    self.assignId(true, tag.tagId)
-                    self.displayChip(tag)
-                })
-            }, function() {
-                $("#tag-assign-form #assign-tag").val('')
-            })
-
+            this.isAssigned(
+                inputTagName,
+                (tagListElement) => {
+                    this.create(
+                        tagListElement.id,
+                        tagListElement.name,
+                        tagListElement.color
+                    );
+                },
+                () => {
+                    $("#tag-assign-form #assign-tag").val("");
+                }
+            );
         });
     }
 
     isAssigned(input, callBackYes, callBackNo) {
-        var self = this;
-        this.tagList.forEach(tagListElement => {
-            if (tagListElement.name == input && !self.assignedId.includes(tagListElement.id)) {
-                callBackYes(tagListElement)
+        Tag.getTagList().forEach((tagListElement) => {
+            if (
+                tagListElement.name == input &&
+                !this.assignedId.includes(tagListElement.id)
+            ) {
+                callBackYes(tagListElement);
             }
-            if (tagListElement.name == input || self.assignedId.includes(tagListElement.id)) {
-                callBackNo()
+            if (
+                tagListElement.name == input ||
+                this.assignedId.includes(tagListElement.id)
+            ) {
+                callBackNo();
             }
         });
     }
 
     assignId(assign, tagId) {
-        if (assign) {
-            this.assignedId.push(tagId)
+        let id = parseInt(tagId)
+        if (assign && !this.assignedId.includes(id)) {
+            this.assignedId.push(id);
         } else {
-            this.assignedId.splice(this.assignedId.indexOf(tagId), 1);
+            this.assignedId.splice(this.assignedId.indexOf(id), 1);
         }
-        console.log(this.assignedId)
     }
 
     cleanAssignedId() {
         this.assignedId = [];
     }
 
-    /****************************************** */
+    /****************************************** preview tags */
 
-    displayChip(tag) {
-        $('#tag-assigned-list').append(this.generateChip(tag))
-
-        var self = this;
-        $(`#chip-${tag.id} button`).click(function() {
-            self.remove(tag.id, function() {
-                self.assignId(false, tag.id)
-                $(`#chip-${tag.id}`).remove().unbind();
-            })
-        })
+    displayAllPreviewTag(tags) {
+        this.cleanPreviewTag();
+        tags.forEach((tag) => {
+            this.displayPreviewTag(tag);
+        });
     }
 
-    generateChip(tag) {
-        let n = this.autocompleteList.indexOf(tag.name)
-        return `<div class="chip" id="chip-${tag.id}" style="background:${tag.color}">
+    displayPreviewTag(tag) {
+        this.assignId(true, tag.tagId);
+        $("#tag-assigned-list").append(this.generatePreviewTag(tag));
+        $(`#chip-${tag.tagId} button`).click(() => {
+            this.remove(tag);
+        });
+    }
+
+    generatePreviewTag(tag) {
+        return `<div class="chip" id="chip-${tag.tagId}" style="background:${tag.color}; color:${niceColor(tag.color)};">
                     <span>${tag.name}</span>
                     <button class="icon-close"></button>
-                </div>`
+                </div>`;
     }
 
-    cleanChips() {
-        this.cleanAssignedId()
-        $('#tag-assigned-list').empty()
+    updatePreviewTag(tag) {
+        $(`#chip-${tag.tagId}`).css("background", tag.color);
+        $(`#chip-${tag.tagId} span`).html(tag.name);
+    }
+
+    removePreviewTag(tagId) {
+        this.assignId(false, tagId);
+        $(`#chip-${tagId}`).remove().unbind();
+    }
+
+    cleanPreviewTag() {
+        this.cleanAssignedId();
+        $("#tag-assigned-list").empty();
+        $("#assign-tag").val('')
+    }
+
+    /********************************* contact tags */
+
+    displayAllContactListTag(tags) {
+        tags.forEach((tag) => {
+            this.displayContactListTag(tag);
+        });
+    }
+
+    displayContactListTag(tag) {
+        $(`#contact-${tag.contactId} .mini-tag-block`)
+            .show()
+            .append(
+                `<div class="mini-chip" id="mini-chip-${tag.tagId}" style="background:${tag.color}">${tag.name}</div>`
+            );
+    }
+
+    updateAllContactListTag(tag) {
+        $(`[id=mini-chip-${tag.tagId}]`)
+            .css("background", tag.color)
+            .html(tag.name);
+    }
+
+    removeContactListTag(tagId) {
+        $(`#contact-${User.getCurrentId()} #mini-chip-${tagId}`).remove();
+    }
+
+    removeAllContactListTag(tagId) {
+        $(`[id=mini-chip-${tagId}]`).remove();
     }
 
     /****************************************** */
 
-
-    show(contactId) {
-
-        var self = this;
-        $.ajax({
-            url: this.baseUrl + '/tagassign/' + contactId,
-            type: 'GET',
-            contentType: 'application/json',
-        }).done(function(response) {
-            self.cleanChips()
-            response.forEach(tag => {
-                //self.tagList.forEach(tag => {
-                //if (contactTag.tagId == tag.id) {
-                self.assignId(true, tag.tagId)
-                self.displayChip(tag)
-                    //}
-                    //});
-            });
-        }).fail(function(response, code) {
-            if (response.status == 400) {
-                toast("This contact already exist.", 4);
-            } else {
-                toast("An error occurred.", 4);
+    create(tagId, name, color) {
+        ajaxRequest(
+            "/tagassign",
+            "POST",
+            JSON.stringify({ contactId: User.getCurrentId(), tagId }),
+            (tag) => {
+                // give name
+                tag.name = name;
+                tag.color = color;
+                this.displayPreviewTag(tag);
+                this.displayContactListTag(tag);
+                this.updateTagCount(tag.tagId, 1);
+            },
+            (status) => {
+                if (status == 400) {
+                    toast("This tag already exist.", 4);
+                } else {
+                    toast("An error occurred.", 4);
+                }
             }
+        );
+    }
+
+    remove(tag) {
+        ajaxRequest("/tagassign/" + tag.id, "DELETE", null, () => {
+            this.removePreviewTag(tag.tagId);
+            this.removeContactListTag(tag.tagId);
+            this.updateTagCount(tag.tagId, -1);
         });
     }
 
-    showAll(callback) {
+    /*********************************************** */
 
-        var self = this;
-        $.ajax({
-            url: this.baseUrl + '/tagassign',
-            type: 'GET',
-            contentType: 'application/json',
-        }).done(function(response) {
-            callback(response)
-        }).fail(function(response, code) {});
+    updateTagCount(tagId, n) {
+        Tag.updateTagCount(tagId, n);
     }
-
-
-    create(tagId, callBack) {
-
-        let currentContactId = UserForm.getCurrentId()
-
-        var self = this;
-        $.ajax({
-            url: this.baseUrl + '/tagassign',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ contactId: currentContactId, tagId })
-        }).done(function(response) {
-            callBack(response)
-        }).fail(function(response, code) {
-            if (response.status == 400) {
-                toast("This contact already exist.", 4);
-            } else {
-                toast("An error occurred.", 4);
-            }
-        });
-    }
-
-    remove(id, callBack) {
-
-        let currentContactId = UserForm.getCurrentId()
-        var self = this;
-        confirmToast("Are you sure?", function() {
-            $.ajax({
-                url: self.baseUrl + '/tagassign/' + id,
-                type: 'DELETE',
-                contentType: 'application/json',
-            }).done(function(response) {
-                callBack()
-            }).fail(function(response, code) {
-                toast("An error occurred.", 4);
-            });
-        })
-    }
-
-
 }
 
 var TagAssign = new TagAssignClass();

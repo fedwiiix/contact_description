@@ -1,5 +1,5 @@
 <?php
-namespace OCA\ContactDescription\Controller;
+namespace OCA\People\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -25,7 +25,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index() {
-		return new TemplateResponse('contact_description', 'index');  // templates/index.php
+		return new TemplateResponse('people', 'index');  // templates/index.php
 	}
 
 }

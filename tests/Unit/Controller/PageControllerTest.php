@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\ContactDescription\Tests\Unit\Controller;
+namespace OCA\People\Tests\Unit\Controller;
 
 use PHPUnit_Framework_TestCase;
 
 use OCP\AppFramework\Http\TemplateResponse;
 
-use OCA\ContactDescription\Controller\PageController;
+use OCA\People\Controller\PageController;
 
 
 class PageControllerTest extends PHPUnit_Framework_TestCase {
@@ -17,7 +17,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
 		$this->controller = new PageController(
-			'contact_description', $request, $this->userId
+			'people', $request, $this->userId
 		);
 	}
 

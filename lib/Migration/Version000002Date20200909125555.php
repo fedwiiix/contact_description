@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\ContactDescription\Migration;
+namespace OCA\People\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
@@ -20,8 +20,8 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
         /** @var ISchemaWrapper $schema */
         $schema = $schemaClosure();
 
-        if (!$schema->hasTable('contact_description')) {
-            $table = $schema->createTable('contact_description');
+        if (!$schema->hasTable('people')) {
+            $table = $schema->createTable('people');
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
                 'notnull' => true,
@@ -37,9 +37,6 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             $table->addColumn('last_name', 'string', [
                 'notnull' => true,
                 'length' => 100,
-            ]);
-            $table->addColumn('description', 'text', [
-                'notnull' => true,
             ]);
             $table->addColumn('work', 'string', [
                 'notnull' => true,
@@ -57,6 +54,9 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
                 'notnull' => true,
                 'length' => 1,
             ]);
+            $table->addColumn('description', 'text', [
+                'notnull' => true,
+            ]);
             $table->addColumn('created', 'integer', [
                 'notnull' => true,
                 'length' => 4,
@@ -66,8 +66,8 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             $table->setPrimaryKey(['id']);
             $table->addUniqueIndex(['user_id','name','last_name'], 'unique_contact');            
         }
-        if (!$schema->hasTable('contact_desc_tag_list')) {
-            $table = $schema->createTable('contact_desc_tag_list');
+        if (!$schema->hasTable('people_tag')) {
+            $table = $schema->createTable('people_tag');
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
                 'notnull' => true,
@@ -83,7 +83,7 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             ]);
             $table->addColumn('color', 'string', [
                 'notnull' => false,
-                'length' => 20,
+                'length' => 7,
             ]);
             $table->addColumn('favorite', 'integer', [
                 'notnull' => true,
@@ -94,8 +94,8 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             $table->setPrimaryKey(['id']);
             $table->addUniqueIndex(['user_id','name'], 'unique_tag');
         }
-        if (!$schema->hasTable('contact_desc_tag')) {
-            $table = $schema->createTable('contact_desc_tag');
+        if (!$schema->hasTable('people_tag_assign')) {
+            $table = $schema->createTable('people_tag_assign');
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
                 'notnull' => true,

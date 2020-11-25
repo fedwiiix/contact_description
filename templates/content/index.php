@@ -6,7 +6,6 @@
 </div>
 
 <section id="contact-preview">
-
     <div class="tag-preview">
         <div id="tag-assigned-list"></div>
         <form id="tag-assign-form" class="autocomplete">

@@ -3,10 +3,9 @@
         Add contact
     </button>
 </div>
-
 <ul>
     <li>
-        <a href="#" class="icon-toggle-filelist">All contacts
+        <a href="#" class="icon-toggle-filelist" id="all-tag">All contacts
             <div class="app-navigation-entry-utils">
                 <ul>
                     <li class="app-navigation-entry-utils-menu-button" id="create-tag-bp">

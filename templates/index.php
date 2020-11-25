@@ -1,6 +1,6 @@
 <?php
-script('contact_description', ['script','autocomplete','TagForm','UserForm','TagAssign']);
-style('contact_description', ['style', 'components','markdown']);
+script('people', ['script','autocomplete','Tag','User','TagAssign','Settings']);
+style('people', ['style', 'components','markdown']);
 ?>
 
 <div id="app">

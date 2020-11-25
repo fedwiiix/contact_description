@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\ContactDescription\Controller;
+namespace OCA\People\Controller;
 
 use Exception;
 
@@ -9,33 +9,29 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\ContactDescription\Db\Tag;
-use OCA\ContactDescription\Db\TagMapper;
+use OCA\People\Db\Tag;
+use OCA\People\Db\TagMapper;
+
+use OCA\People\Db\Tagassign;
+use OCA\People\Db\TagassignMapper;
 
 class TagController extends Controller {
 
     private $mapper;
     private $userId;
 
-    public function __construct(string $AppName, IRequest $request, TagMapper $mapper, $UserId)
+    public function __construct(string $AppName, IRequest $request, TagMapper $mapper, TagassignMapper $assignMapper, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->mapper = $mapper;
         $this->userId = $UserId;
+        $this->assignMapper = $assignMapper;
     }
 
     /**
      * @NoAdminRequired
      */
     public function index()
-    {
-        return new DataResponse($this->mapper->findAll($this->userId));
-    }
-
-    /**
-     * @NoAdminRequired
-     */
-    public function list()
     {
         return new DataResponse($this->mapper->findList($this->userId));
     }
@@ -83,12 +79,12 @@ class TagController extends Controller {
 
         try {
             $tag = $this->mapper->find($id, $this->userId);
+            $tag->setName($name);
+            $tag->setColor($color);
+            return new DataResponse($this->mapper->update($tag));
         } catch (Exception $e) {
-            return new DataResponse([], Http::STATUS_NOT_FOUND);
+            return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
-        $tag->setName($name);
-        $tag->setColor($color);
-        return new DataResponse($this->mapper->update($tag));
     }
 
     /**
@@ -101,7 +97,7 @@ class TagController extends Controller {
                             int $favorite)
     {
         try {
-            $tag = $this->mapper->find($id, $this->userId);
+            $tag = $this->mapper->findWithCount($id, $this->userId);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }
@@ -116,12 +112,23 @@ class TagController extends Controller {
      */
     public function destroy(int $id)
     {
+        // remove all asign
+        try {
+            $assignedTag = $this->assignMapper->findByTagId($id);
+        } catch (Exception $e) {
+            return new DataResponse([], Http::STATUS_NOT_FOUND);
+        }
+        foreach ($assignedTag as $key => $value) {
+            $this->assignMapper->delete($value);
+        }
+        // remove tag
         try {
             $tag = $this->mapper->find($id, $this->userId);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }
         $this->mapper->delete($tag);
+
         return new DataResponse($tag);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\ContactDescription\Controller;
+namespace OCA\People\Controller;
 
 use Exception;
 
@@ -9,19 +9,25 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\ContactDescription\Db\Contact;
-use OCA\ContactDescription\Db\ContactMapper;
+use OCA\People\Db\Contact;
+use OCA\People\Db\ContactMapper;
 
-class ContactController extends Controller {
+use OCA\People\Db\TagassignMapper;
+use OCA\People\Db\TagMapper;
+
+class ContactController extends Controller
+{
 
     private $mapper;
     private $userId;
 
-    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, $UserId)
+    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, TagassignMapper $assignMapper, TagMapper $tagMapper, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->mapper = $mapper;
         $this->userId = $UserId;
+        $this->assignMapper = $assignMapper;
+        $this->tagMapper = $tagMapper;
     }
 
     /**
@@ -29,42 +35,14 @@ class ContactController extends Controller {
      */
     public function index()
     {
-        return new DataResponse($this->mapper->findAll($this->userId));
-    }
-
-    /**
-     * @NoAdminRequired
-     * 
-     * @param string $genre
-     * @param string $page
-     */
-    public function list(string $genre, int $page)
-    {
-        //return new DataResponse($this->mapper->findList($this->userId));
-        /*if($genre=="all"){
-            return new DataResponse($this->mapper->findAll($this->userId, $page));
-        }else if($genre=="listed"){
-            //return new DataResponse($this->mapper->findListed($this->userId, $page));
-        }else if($genre=="best"){
-          //  return new DataResponse($this->mapper->findBestOrder($this->userId, $page));
-        }else{
-          //  return new DataResponse($this->mapper->findAllByGenre($this->userId, $genre, $page));
-        }
-                            try {
+        try {
+            $rep->assign = $this->assignMapper->findAll();
+            $rep->contact = $this->mapper->findAll($this->userId);
+            return new DataResponse($rep);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
-        }*/
+        }
     }
-
-    /*/**
-     * @NoAdminRequired
-     * 
-     * @param string $search
-     */
-    /*public function search(string $search)
-    {
-       // return new DataResponse($this->mapper->search($this->userId, $search));
-    }*/
 
     /**
      * @NoAdminRequired
@@ -74,7 +52,9 @@ class ContactController extends Controller {
     public function show(int $id)
     {
         try {
-            return new DataResponse($this->mapper->find($id, $this->userId));
+            $rep->assign = $this->assignMapper->findForContact($id);
+            $rep->contact = $this->mapper->find($id, $this->userId);
+            return new DataResponse($rep);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }
@@ -91,15 +71,16 @@ class ContactController extends Controller {
      * @param string $birth
      * @param int $birthNotif
      */
-    public function create( string $name,
-                            string $lastName,
-                            string $description,
-                            string $work,
-                            string $hobbies,
-                            string $birth,
-                            int $birthNotif)
-    {
-        if(strlen($name) < 3){
+    public function create(
+        string $name,
+        string $lastName,
+        string $description,
+        string $work,
+        string $hobbies,
+        string $birth,
+        int $birthNotif
+    ) {
+        if (strlen($name) < 3) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
@@ -135,20 +116,21 @@ class ContactController extends Controller {
      * @param string $birth
      * @param int $birthNotif
      */
-    public function update( int $id,
-                            string $name,
-                            string $lastName,
-                            string $description,
-                            string $work,
-                            string $hobbies,
-                            string $birth,
-                            int $birthNotif)
-    {
-        if(strlen($name) < 3){
+    public function update(
+        int $id,
+        string $name,
+        string $lastName,
+        string $description,
+        string $work,
+        string $hobbies,
+        string $birth,
+        int $birthNotif
+    ) {
+        if (strlen($name) < 3) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
-        
+
         try {
             $contact = $this->mapper->find($id, $this->userId);
         } catch (Exception $e) {
@@ -172,6 +154,16 @@ class ContactController extends Controller {
      */
     public function destroy(int $id)
     {
+        // remove all asign
+        try {
+            $assignedTag = $this->assignMapper->findByContactId($id);
+        } catch (Exception $e) {
+            return new DataResponse([], Http::STATUS_NOT_FOUND);
+        }
+        foreach ($assignedTag as $key => $value) {
+            $this->assignMapper->delete($value);
+        }
+        // remove contact
         try {
             $contact = $this->mapper->find($id, $this->userId);
         } catch (Exception $e) {
@@ -179,5 +171,43 @@ class ContactController extends Controller {
         }
         $this->mapper->delete($contact);
         return new DataResponse($contact);
+    }
+
+    /**
+     * @NoAdminRequired
+     *
+     */
+    public function export()
+    {
+        try {
+            $rep->assign = $this->assignMapper->export($this->userId);
+            $rep->contact = $this->mapper->export($this->userId);
+
+            $array = array();
+            foreach ($rep->contact as $contact) {
+                $assigned = array();
+                foreach ($rep->assign as $assign) {
+                    if ($assign->getContactId() == $contact->getId()) {
+                        array_push($assigned, array(
+                            "name" => is_null($assign->getName()) ? '' : $assign->getName(),
+                            "color" => is_null($assign->getColor()) ? '' : $assign->getColor(),
+                        ));
+                    }
+                }
+                array_push($array, array(
+                    "name" => is_null($contact->getName()) ? '' : $contact->getName(),
+                    "last_name" => is_null($contact->getLastName()) ? '' : $contact->getLastName(),
+                    "description" => is_null($contact->getDescription()) ? '' : $contact->getDescription(),
+                    "work" => is_null($contact->getWork()) ? '' : $contact->getWork(),
+                    "hobbies" => is_null($contact->getHobbies()) ? '' : $contact->getHobbies(),
+                    "birth" => is_null($contact->getBirth()) ? '' : $contact->getBirth(),
+                    "birth_notif" => is_null($contact->getBirthNotif()) ? '' : $contact->getBirthNotif(),
+                    "tag" => $assigned
+                ));
+            }
+            return new DataResponse($array);
+        } catch (Exception $e) {
+            return new DataResponse([], Http::STATUS_NOT_FOUND);
+        }
     }
 }

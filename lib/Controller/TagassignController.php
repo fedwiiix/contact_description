@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\ContactDescription\Controller;
+namespace OCA\People\Controller;
 
 use Exception;
 
@@ -9,8 +9,8 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\ContactDescription\Db\Tagassign;
-use OCA\ContactDescription\Db\TagassignMapper;
+use OCA\People\Db\Tagassign;
+use OCA\People\Db\TagassignMapper;
 
 class TagassignController extends Controller {
 
