@@ -14,7 +14,6 @@ class TagFormClass {
         $(window).click(function() {
             self.hideEntryMenu();
         });
-
     }
 
     getAndDisplayTags() {
@@ -37,10 +36,11 @@ class TagFormClass {
 
     displayTag(element) {
         var html = `<li id="tag-${element.id}">
-            <a href="#"><span id="label-tag-${element.id}">${element.tagName}</span>
+            <div class="app-navigation-entry-bullet" id="tag-bullet-${element.id}" style="background:${element.color}"></div>
+            <a href="#"><span id="tag-label-${element.id}">${element.name}</span>
                 <div class="app-navigation-entry-utils">
                     <ul>
-                        <li class="app-navigation-entry-utils-counter">${element.count==0?'':element.count}</li>
+                        <li class="app-navigation-entry-utils-counter">${element.count>0?element.count:''}</li>
                         <li class="app-navigation-entry-utils-menu-button" id="tag-open-menu-${element.id}">
                             <button></button>
                         </li>
@@ -53,10 +53,6 @@ class TagFormClass {
                         <a href="#" id="favorite-tag-${element.id}">
                             <span class="icon-add"></span>
                             <span>${(element.favorite==1?'Remove':'Add')} to favorite</span>
-                            <form class="hidden">
-                                <input id="input-folder" type="text" value="New tag">
-                                <input type="submit" value=" " class="icon-confirm">
-                            </form>
                         </a>
                     </li>
                     <li>
@@ -66,10 +62,10 @@ class TagFormClass {
                         </a>
                     </li>
                     <li>
-                        <form class="tag-edit-form" id="edit-tag-${element.id}">
-                            <input id="input-tag-${element.id}" type="text" value="${element.tagName}">
-                            <input type="submit" value=" " class="icon-confirm">
-                        </form>
+                        <a href="#" id="edit-tag-${element.id}">
+                            <span class="icon-rename"></span>
+                            <span>Edit</span>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -96,65 +92,106 @@ class TagFormClass {
             self.remove(element.id)
         });
 
-        $(`#edit-tag-${element.id}`).submit(function(event) {
-            event.preventDefault()
-            let tagName = $(`#input-tag-${element.id}`).val();
-            self.update(element.id, tagName);
+        $(`#edit-tag-${element.id}`).click(function(event) {
+
+            self.generateTagForm(`#tag-menu-${element.id}`, element)
         });
-
-
-
     }
 
     hideEntryMenu() {
         if ($('.app-navigation-entry-menu').is(":visible")) {
             $('.app-navigation-entry-menu').hide();
         }
+        if ($('#tag-form').length) {
+            $('#tag-form').remove()
+        }
+
+    }
+
+    updateTag(tag) {
+        $(`#tag-label-${tag.id}`).html(tag.name)
+        $(`#tag-bullet-${tag.id}`).css('background', tag.color)
+        let self = this;
+        $(`#edit-tag-${tag.id}`).unbind().click(function(event) {
+            self.generateTagForm(`#tag-menu-${tag.id}`, tag)
+        });
+    }
+
+    removeTag(id) {
+        $(`#tag-${id}`).remove().unbind();
     }
 
     /********************************************* */
 
     initCreateTag() {
 
-        let self = this;
-        $("#tag-create-form").submit(function(event) {
-            event.preventDefault()
-            let tagName = $('#input-create-tag').val();
-            self.createTag(tagName);
-        });
-
         $('#create-tag').click(function(event) {
             event.stopPropagation();
         });
 
+        let self = this;
         $('#create-tag-bp').click(function(event) {
             event.stopPropagation();
             self.hideEntryMenu();
-            self.showCreateTagMenu()
+            $('#create-tag').show();
+            self.generateTagForm('#create-tag')
+        })
+    }
+
+    generateTagForm(target, tag) {
+
+        $(target).append(`<form id="tag-form">
+            <input id="input-create-tag" type="text" placeholder="New tag" value="${tag?tag.name:''}" autocomplete="off">
+            <input type="submit" value=" " class="icon-confirm">
+            <div class="colorpicker">
+                <ul class="colorpicker-list">
+                    <li style="background-color: rgb(49, 204, 124);"></li><li style="background-color: rgb(49, 124, 204);"></li><li style="background-color: rgb(255, 122, 102);"></li><li style="background-color: rgb(241, 219, 80);"></li><li style="background-color: rgb(124, 49, 204);"></li><li style="background-color: rgb(204, 49, 124);"></li><li style="background-color: rgb(58, 59, 61);"></li><li style="background-color: rgb(202, 203, 205);"></li><!--
+                    --><label class="color-selector-label selected" style="background-color:${tag?tag.color:''}"><input type="color" class="color-selector"></label>
+                </ul>
+            </div>
+        </form>`)
+
+        $('.colorpicker li, .colorpicker label').click(function() {
+            $('.colorpicker li, .colorpicker label').removeClass('selected')
+            $(this).addClass('selected')
         })
 
-        $('#input-create-tag').mouseover(function() {
-            $(this).focus()
+        $('.colorpicker input').change(function() {
+            $(this).parent('label').css('background-color', $(this).val())
+        })
+
+        let self = this;
+        $("#tag-form").submit(function(event) {
+            event.preventDefault()
+            let name = self.capitalize($('#input-create-tag').val());
+            let color = $('.colorpicker .selected').css('background-color')
+            if (tag) {
+                self.update(tag.id, name, color);
+            } else {
+                self.create(name, color);
+            }
         });
     }
 
-    showCreateTagMenu() {
-        $('#create-tag').show();
-        $('#input-create-tag').focus().val('');
+    capitalize(input) {
+        return input.charAt(0).toUpperCase() + input.slice(1) //.toLowerCase()
     }
 
-    createTag(tagName) {
+    /******************************************** */
 
-        if (tagName.length < 3) { return; }
+    create(name, color) {
+
+        if (!name.length) { return; }
         var self = this;
         $.ajax({
             url: this.baseUrl + '/tag',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ tagName })
+            data: JSON.stringify({ name, color })
         }).done(function(response) {
             self.hideEntryMenu();
             self.displayTag(response)
+            self.updateTagAssignAutocomplete()
         }).fail(function(response, code) {
             if (response.status == 400) {
                 toast("This tag already exist.", 4);
@@ -164,16 +201,18 @@ class TagFormClass {
         });
     }
 
-    update(id, tagName) {
+    update(id, name, color) {
         var self = this;
+        if (!name.length) { return; }
         $.ajax({
             url: this.baseUrl + '/tag/' + id,
             type: 'PUT',
             contentType: 'application/json',
-            data: JSON.stringify({ tagName })
-        }).done(function(response) {
+            data: JSON.stringify({ name, color })
+        }).done(function(tag) {
             self.hideEntryMenu();
-            $(`#label-tag-${response.id}`).html(response.tagName)
+            self.updateTag(tag)
+            self.updateTagAssignAutocomplete()
         }).fail(function(response, code) {
             toast("An error occurred.", 4);
         });
@@ -205,16 +244,17 @@ class TagFormClass {
             }).done(function(response) {
                 self.hideEntryMenu();
                 self.removeTag(id)
+                self.updateTagAssignAutocomplete()
             }).fail(function(response, code) {
                 toast("An error occurred.", 4);
             });
         })
     }
 
-    removeTag(id) {
-        $(`#tag-${id}`).remove().unbind();
-    }
 
+    updateTagAssignAutocomplete() {
+        TagAssign.initAutocomplete()
+    }
 }
 
 var TagForm = new TagFormClass();

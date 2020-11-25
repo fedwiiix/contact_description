@@ -27,11 +27,12 @@ class TagassignMapper extends QBMapper
     public function findAll()
     {
         $qb = $this->db->getQueryBuilder();
-        $qb->select('s1.tag_id')
-            ->addSelect('s2.tag_name')
+        $qb->select('s1.*')
+            ->addSelect('s2.name')
+            ->addSelect('s2.color')
             ->from($this->getTableName(), 's1')
             ->join('s1', $this->tagListDB, 's2', $qb->expr()->eq('s1.tag_id', 's2.id'))
-            ->orderBy('s2.tag_name', 'ASC');
+            ->orderBy('s2.name', 'ASC');
 
         return $this->findEntities($qb);
     }
@@ -40,11 +41,12 @@ class TagassignMapper extends QBMapper
     {
         $qb = $this->db->getQueryBuilder();
         $qb->select('s1.*')
-            ->addSelect('s2.tag_name')
+            ->addSelect('s2.name')
+            ->addSelect('s2.color')
             ->from($this->getTableName(), 's1')
             ->where($qb->expr()->eq('contact_id', $qb->createNamedParameter($contactId)))
             ->join('s1', $this->tagListDB, 's2', $qb->expr()->eq('s1.tag_id', 's2.id'))
-            ->orderBy('s2.tag_name', 'ASC');
+            ->orderBy('s2.name', 'ASC');
 
         return $this->findEntities($qb);
     }

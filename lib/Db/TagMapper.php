@@ -42,7 +42,7 @@ class TagMapper extends QBMapper {
            ->from($this->getTableName(), 's1')
            ->leftJoin('s1', $this->tagAssignDB, 's2', $qb->expr()->eq('s1.id', 's2.tag_id'))
            //->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
-           //->orderBy('s2.tag_name', 'ASC');
+           //->orderBy('s2.name', 'ASC');
            ->groupBy('s1.id')
            ;
 

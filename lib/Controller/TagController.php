@@ -43,17 +43,20 @@ class TagController extends Controller {
     /**
      * @NoAdminRequired
      *
-     * @param string $tagName
+     * @param string $name
+     * @param string $color
      */
-    public function create(string $tagName)
+    public function create( string $name, 
+                            string $color)
     {
-        if(strlen($tagName) < 3){
+        if(!strlen($name)){
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
         $tag = new Tag();
         $tag->setUserId($this->userId);
-        $tag->setTagName($tagName);
+        $tag->setName($name);
+        $tag->setColor($color);
         $tag->setFavorite(0);
 
         try {
@@ -67,12 +70,14 @@ class TagController extends Controller {
      * @NoAdminRequired
      *
      * @param int $id
-     * @param string $tagName
+     * @param string $name
+     * @param string $color
      */
     public function update( int $id,
-                            string $tagName)
+                            string $name, 
+                            string $color)
     {
-        if(strlen($tagName) < 3){
+        if(!strlen($name)){
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
@@ -81,7 +86,8 @@ class TagController extends Controller {
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }
-        $tag->setTagName($tagName);
+        $tag->setName($name);
+        $tag->setColor($color);
         return new DataResponse($this->mapper->update($tag));
     }
 

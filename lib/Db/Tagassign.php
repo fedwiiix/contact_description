@@ -10,14 +10,16 @@ class Tagassign extends Entity implements JsonSerializable {
     public $id;
     protected $contactId;
     protected $tagId;
-    protected $tagName;
+    protected $name;
+    protected $color;
 
     public function jsonSerialize() {
         return [
             'id' => $this->id,
             'contactId' => $this->contactId,
             'tagId' => $this->tagId,
-            'tagName' => $this->tagName,
+            'name' => $this->name,
+            'color' => $this->color,
         ];
     }
 }

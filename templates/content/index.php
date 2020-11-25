@@ -7,22 +7,13 @@
 
 <section id="contact-preview">
 
-  
-
-    <form id="tag-assign-form" class="autocomplete">
-        <input id="assign-tag" type="text" placeholder="tag" autocomplete="off">
-        <input type="submit" value="" class="icon-confirm">
-    </form>
-  
-    <div id="tag-assigned-list">
-        
-        
+    <div class="tag-preview">
+        <div id="tag-assigned-list"></div>
+        <form id="tag-assign-form" class="autocomplete">
+            <input id="assign-tag" type="text" placeholder="tag" autocomplete="off">
+            <input type="submit" value="" class="icon-confirm">
+        </form>
     </div>
-
-
-
-
-
     <div>
         <span class="icon-more" id="preview-setting"></span>
         <div class="popovermenu" id="preview-menu">

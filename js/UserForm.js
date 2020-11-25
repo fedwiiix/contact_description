@@ -150,6 +150,7 @@ class UserFormClass {
                 response.forEach(element => {
                     self.displayContactList(element)
                 });
+                self.sowAllTag()
                 self.displayFirstContact()
             }
         }).fail(function(response, code) {
@@ -164,7 +165,7 @@ class UserFormClass {
         return `<a href="#" class="app-content-list-item" id="contact-${contact.id}">
                     <div class="app-content-list-item-icon" style="background-color: ${color}">${letter}</div>
                     <div class="app-content-list-item-line-one">${contact.name} ${contact.lastName}</div>
-                    <!--div class="app-content-list-item-line-two"></div-->
+                    <div class="app-content-list-item-line-two mini-tag-block"></div>
                 </a>`
     }
 
@@ -281,8 +282,25 @@ class UserFormClass {
 
     /********************************* */
 
+    displayContactListTag(tagAssign) {
+        $(`#contact-${tagAssign.contactId} .mini-tag-block`)
+            .show()
+            .append(`<div class="mini-chip" id="mini-chip-${tagAssign.color}" style="background:${tagAssign.color}">${tagAssign.name}</div>`)
+    }
+
+    /********************************* */
+
     showTags(id) {
         TagAssign.show(id)
+    }
+
+    sowAllTag() {
+        var self = this;
+        TagAssign.showAll(function(response) {
+            response.forEach(element => {
+                self.displayContactListTag(element)
+            });
+        })
     }
 
 }

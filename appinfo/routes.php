@@ -29,7 +29,7 @@ return [
        ['name' => 'tagassign#index', 'url' => '/tagassign', 'verb' => 'GET'],
        ['name' => 'tagassign#show', 'url' => '/tagassign/{id}', 'verb' => 'GET'],
        ['name' => 'tagassign#create', 'url' => '/tagassign', 'verb' => 'POST'],
-       ['name' => 'tagassign#destroy', 'url' => '/tagassign', 'verb' => 'DELETE'],
+       ['name' => 'tagassign#destroy', 'url' => '/tagassign/{id}', 'verb' => 'DELETE'],
 
     ]
 ];

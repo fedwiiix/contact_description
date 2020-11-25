@@ -2,7 +2,6 @@ class TagAssignClass {
 
     constructor() {
         this.baseUrl = OC.generateUrl('/apps/contact_description');
-        this.colorsArray = ["#2196f3", "#f44336", "#4caf50", "#03a9f4", "#9e9e9e", "#9c27b0", "#ff9800", "#ffc107", "#795548", "#607d8b", "#ff5722", "#009688", "#e91e63", "#00838f", "#b71c1c", "#ea80fc", "#00796b", "#388e3c", "#ad1457", "#1976d2", "#00bcd4", "#1b5e20", "#ffca28", "#bdbdbd", "#e64a19", "#78909c"]
         this.tagList = [];
         this.assignedId = [];
         this.autocompleteList = []
@@ -25,7 +24,7 @@ class TagAssignClass {
             self.tagList = response;
             self.autocompleteList = []
             response.forEach(tag => {
-                self.autocompleteList.push(tag.tagName)
+                self.autocompleteList.push(tag.name)
             });
             autocomplete(document.getElementById("assign-tag"), self.autocompleteList);
         }).fail(function(response, code) {
@@ -38,13 +37,15 @@ class TagAssignClass {
         var self = this;
         $("#tag-assign-form").submit(function(event) {
             event.preventDefault()
-            let input = $("#tag-assign-form #assign-tag").val()
+            let inputTagName = $("#tag-assign-form #assign-tag").val()
 
-            self.ifAssigned(input, function(tag) {
-
-                self.create(tag.id, function() {
-                    self.assignId(true, tag.id)
-                    self.generateChip(tag)
+            self.isAssigned(inputTagName, function(tagListElement) {
+                self.create(tagListElement.id, function(tag) {
+                    // give name
+                    tag.name = tagListElement.name
+                    tag.color = tagListElement.color
+                    self.assignId(true, tag.tagId)
+                    self.displayChip(tag)
                 })
             }, function() {
                 $("#tag-assign-form #assign-tag").val('')
@@ -53,13 +54,35 @@ class TagAssignClass {
         });
     }
 
-    generateChip(tag) {
-        let n = this.autocompleteList.indexOf(tag.tagName)
-        let color = this.colorsArray[n]
-        $('#tag-assigned-list').append(`<div class="chip" id="chip-${tag.id}" style="background:${color}">
-                                            <span>${tag.tagName}</span>
-                                            <button class="icon-close"></button>
-                                        </div>`)
+    isAssigned(input, callBackYes, callBackNo) {
+        var self = this;
+        this.tagList.forEach(tagListElement => {
+            if (tagListElement.name == input && !self.assignedId.includes(tagListElement.id)) {
+                callBackYes(tagListElement)
+            }
+            if (tagListElement.name == input || self.assignedId.includes(tagListElement.id)) {
+                callBackNo()
+            }
+        });
+    }
+
+    assignId(assign, tagId) {
+        if (assign) {
+            this.assignedId.push(tagId)
+        } else {
+            this.assignedId.splice(this.assignedId.indexOf(tagId), 1);
+        }
+        console.log(this.assignedId)
+    }
+
+    cleanAssignedId() {
+        this.assignedId = [];
+    }
+
+    /****************************************** */
+
+    displayChip(tag) {
+        $('#tag-assigned-list').append(this.generateChip(tag))
 
         var self = this;
         $(`#chip-${tag.id} button`).click(function() {
@@ -70,25 +93,17 @@ class TagAssignClass {
         })
     }
 
-    assignId(assign, id) {
-        if (assign) {
-            this.assignedId.push(id)
-        } else {
-            this.assignedId.splice(this.assignedId.indexOf(id), 1);
-        }
-        console.log(this.assignedId)
+    generateChip(tag) {
+        let n = this.autocompleteList.indexOf(tag.name)
+        return `<div class="chip" id="chip-${tag.id}" style="background:${tag.color}">
+                    <span>${tag.name}</span>
+                    <button class="icon-close"></button>
+                </div>`
     }
 
-    ifAssigned(input, callBackYes, callBackNo) {
-        var self = this;
-        this.tagList.forEach(tag => {
-            if (tag.tagName == input && !self.assignedId.includes(tag.id)) {
-                callBackYes(tag)
-            }
-            if (tag.tagName == input || self.assignedId.includes(tag.id)) {
-                callBackNo()
-            }
-        });
+    cleanChips() {
+        this.cleanAssignedId()
+        $('#tag-assigned-list').empty()
     }
 
     /****************************************** */
@@ -102,13 +117,14 @@ class TagAssignClass {
             type: 'GET',
             contentType: 'application/json',
         }).done(function(response) {
-            response.forEach(contactTag => {
-                self.tagList.forEach(tag => {
-                    if (contactTag.tagId == tag.id) {
-                        self.assignId(true, tag.id)
-                        self.generateChip(tag)
-                    }
-                });
+            self.cleanChips()
+            response.forEach(tag => {
+                //self.tagList.forEach(tag => {
+                //if (contactTag.tagId == tag.id) {
+                self.assignId(true, tag.tagId)
+                self.displayChip(tag)
+                    //}
+                    //});
             });
         }).fail(function(response, code) {
             if (response.status == 400) {
@@ -117,6 +133,18 @@ class TagAssignClass {
                 toast("An error occurred.", 4);
             }
         });
+    }
+
+    showAll(callback) {
+
+        var self = this;
+        $.ajax({
+            url: this.baseUrl + '/tagassign',
+            type: 'GET',
+            contentType: 'application/json',
+        }).done(function(response) {
+            callback(response)
+        }).fail(function(response, code) {});
     }
 
 
@@ -131,7 +159,7 @@ class TagAssignClass {
             contentType: 'application/json',
             data: JSON.stringify({ contactId: currentContactId, tagId })
         }).done(function(response) {
-            callBack()
+            callBack(response)
         }).fail(function(response, code) {
             if (response.status == 400) {
                 toast("This contact already exist.", 4);
@@ -141,16 +169,15 @@ class TagAssignClass {
         });
     }
 
-    remove(tagId, callBack) {
+    remove(id, callBack) {
 
         let currentContactId = UserForm.getCurrentId()
         var self = this;
         confirmToast("Are you sure?", function() {
             $.ajax({
-                url: self.baseUrl + '/tagassign',
+                url: self.baseUrl + '/tagassign/' + id,
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ contactId: currentContactId, tagId })
             }).done(function(response) {
                 callBack()
             }).fail(function(response, code) {

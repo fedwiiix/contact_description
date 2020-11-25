@@ -3,6 +3,7 @@
         Add contact
     </button>
 </div>
+
 <ul>
     <li>
         <a href="#" class="icon-toggle-filelist">All contacts
@@ -14,18 +15,7 @@
                 </ul>
             </div>
         </a>
-        <div class="app-navigation-entry-menu" id="create-tag">
-            <ul>
-                <li>
-                    <a href="#">
-                        <form id="tag-create-form">
-                            <input id="input-create-tag" type="text" placeholder="New tag">
-                            <input type="submit" value=" " class="icon-confirm">
-                        </form>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <div class="app-navigation-entry-menu" id="create-tag"></div>
     </li>
     <li>
         <a href="#" class="icon-favorite">Favorites tags</a>

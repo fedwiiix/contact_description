@@ -65,14 +65,12 @@ class TagassignController extends Controller {
     /**
      * @NoAdminRequired
      *
-     * @param int $contactId
-     * @param int $tagId
+     * @param int $id
      */
-    public function destroy(int $contactId, 
-                            int $tagId)
+    public function destroy(int $id)
     {
         try {
-            $tag = $this->mapper->findFor($contactId, $tagId);
+            $tag = $this->mapper->find($id);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }

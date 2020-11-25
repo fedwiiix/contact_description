@@ -9,7 +9,8 @@ class Tag extends Entity implements JsonSerializable {
 
     public $id;
     protected $userId;
-    protected $tagName;
+    protected $name;
+    protected $color;
     protected $favorite;
     protected $count;
 
@@ -17,7 +18,8 @@ class Tag extends Entity implements JsonSerializable {
         return [
             'id' => $this->id,
             'userId' => $this->userId,
-            'tagName' => $this->tagName,
+            'name' => $this->name,
+            'color' => $this->color,
             'favorite' => $this->favorite,
             'count' => $this->count,
         ];

@@ -77,9 +77,13 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
                 'notnull' => true,
                 'length' => 100,
             ]);
-            $table->addColumn('tag_name', 'string', [
+            $table->addColumn('name', 'string', [
                 'notnull' => false,
                 'length' => 100,
+            ]);
+            $table->addColumn('color', 'string', [
+                'notnull' => false,
+                'length' => 20,
             ]);
             $table->addColumn('favorite', 'integer', [
                 'notnull' => true,
@@ -88,7 +92,7 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             ]);
             
             $table->setPrimaryKey(['id']);
-            $table->addUniqueIndex(['user_id','tag_name'], 'unique_tag');
+            $table->addUniqueIndex(['user_id','name'], 'unique_tag');
         }
         if (!$schema->hasTable('contact_desc_tag')) {
             $table = $schema->createTable('contact_desc_tag');
