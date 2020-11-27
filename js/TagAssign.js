@@ -89,7 +89,7 @@ class TagAssignClass {
     }
 
     generatePreviewTag(tag) {
-        return `<div class="chip" id="chip-${tag.tagId}" style="background:${tag.color}; color:${niceColor(tag.color)};">
+        return `<div class="chip" id="chip-${tag.tagId}" tagid="${tag.tagId}" style="background:${tag.color}; color:${niceColor(tag.color)};">
                     <span>${tag.name}</span>
                     <button class="icon-close"></button>
                 </div>`;

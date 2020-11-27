@@ -8,6 +8,7 @@
         <a href="#" class="icon-toggle-filelist" id="all-tag">All contacts
             <div class="app-navigation-entry-utils">
                 <ul>
+                    <li class="app-navigation-entry-utils-counter counter"></li>
                     <li class="app-navigation-entry-utils-menu-button" id="create-tag-bp">
                         <button></button>
                     </li>

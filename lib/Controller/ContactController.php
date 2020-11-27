@@ -13,7 +13,6 @@ use OCA\People\Db\Contact;
 use OCA\People\Db\ContactMapper;
 
 use OCA\People\Db\TagassignMapper;
-use OCA\People\Db\TagMapper;
 
 class ContactController extends Controller
 {
@@ -21,13 +20,12 @@ class ContactController extends Controller
     private $mapper;
     private $userId;
 
-    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, TagassignMapper $assignMapper, TagMapper $tagMapper, $UserId)
+    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, TagassignMapper $assignMapper, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->mapper = $mapper;
         $this->userId = $UserId;
         $this->assignMapper = $assignMapper;
-        $this->tagMapper = $tagMapper;
     }
 
     /**
@@ -36,6 +34,7 @@ class ContactController extends Controller
     public function index()
     {
         try {
+            $rep = (object)[];
             $rep->assign = $this->assignMapper->findAll();
             $rep->contact = $this->mapper->findAll($this->userId);
             return new DataResponse($rep);
@@ -52,6 +51,7 @@ class ContactController extends Controller
     public function show(int $id)
     {
         try {
+            $rep = (object)[];
             $rep->assign = $this->assignMapper->findForContact($id);
             $rep->contact = $this->mapper->find($id, $this->userId);
             return new DataResponse($rep);
@@ -83,7 +83,6 @@ class ContactController extends Controller
         if (strlen($name) < 3) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
-
         $date = new \DateTime();
 
         $contact = new Contact();
@@ -129,7 +128,7 @@ class ContactController extends Controller
         if (strlen($name) < 3) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
-
+        $date = new \DateTime();
 
         try {
             $contact = $this->mapper->find($id, $this->userId);
@@ -144,6 +143,7 @@ class ContactController extends Controller
         $contact->setBirth($birth);
         $contact->setBirthNotif($birthNotif);
         $contact->setUserId($this->userId);
+        $contact->setCreated($date->getTimestamp());
         return new DataResponse($this->mapper->update($contact));
     }
 
@@ -171,43 +171,5 @@ class ContactController extends Controller
         }
         $this->mapper->delete($contact);
         return new DataResponse($contact);
-    }
-
-    /**
-     * @NoAdminRequired
-     *
-     */
-    public function export()
-    {
-        try {
-            $rep->assign = $this->assignMapper->export($this->userId);
-            $rep->contact = $this->mapper->export($this->userId);
-
-            $array = array();
-            foreach ($rep->contact as $contact) {
-                $assigned = array();
-                foreach ($rep->assign as $assign) {
-                    if ($assign->getContactId() == $contact->getId()) {
-                        array_push($assigned, array(
-                            "name" => is_null($assign->getName()) ? '' : $assign->getName(),
-                            "color" => is_null($assign->getColor()) ? '' : $assign->getColor(),
-                        ));
-                    }
-                }
-                array_push($array, array(
-                    "name" => is_null($contact->getName()) ? '' : $contact->getName(),
-                    "last_name" => is_null($contact->getLastName()) ? '' : $contact->getLastName(),
-                    "description" => is_null($contact->getDescription()) ? '' : $contact->getDescription(),
-                    "work" => is_null($contact->getWork()) ? '' : $contact->getWork(),
-                    "hobbies" => is_null($contact->getHobbies()) ? '' : $contact->getHobbies(),
-                    "birth" => is_null($contact->getBirth()) ? '' : $contact->getBirth(),
-                    "birth_notif" => is_null($contact->getBirthNotif()) ? '' : $contact->getBirthNotif(),
-                    "tag" => $assigned
-                ));
-            }
-            return new DataResponse($array);
-        } catch (Exception $e) {
-            return new DataResponse([], Http::STATUS_NOT_FOUND);
-        }
     }
 }

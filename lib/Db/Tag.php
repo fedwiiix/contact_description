@@ -1,11 +1,13 @@
 <?php
+
 namespace OCA\People\Db;
 
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 
-class Tag extends Entity implements JsonSerializable {
+class Tag extends Entity implements JsonSerializable
+{
 
     public $id;
     protected $userId;
@@ -14,7 +16,8 @@ class Tag extends Entity implements JsonSerializable {
     protected $favorite;
     protected $count;
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'id' => $this->id,
             'userId' => $this->userId,

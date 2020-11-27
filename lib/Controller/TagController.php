@@ -15,7 +15,8 @@ use OCA\People\Db\TagMapper;
 use OCA\People\Db\Tagassign;
 use OCA\People\Db\TagassignMapper;
 
-class TagController extends Controller {
+class TagController extends Controller
+{
 
     private $mapper;
     private $userId;
@@ -42,10 +43,11 @@ class TagController extends Controller {
      * @param string $name
      * @param string $color
      */
-    public function create( string $name, 
-                            string $color)
-    {
-        if(!strlen($name)){
+    public function create(
+        string $name,
+        string $color
+    ) {
+        if (!strlen($name)) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
@@ -69,11 +71,12 @@ class TagController extends Controller {
      * @param string $name
      * @param string $color
      */
-    public function update( int $id,
-                            string $name, 
-                            string $color)
-    {
-        if(!strlen($name)){
+    public function update(
+        int $id,
+        string $name,
+        string $color
+    ) {
+        if (!strlen($name)) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
         }
 
@@ -93,9 +96,10 @@ class TagController extends Controller {
      * @param int $id
      * @param int $favorite
      */
-    public function favorite( int $id,
-                            int $favorite)
-    {
+    public function favorite(
+        int $id,
+        int $favorite
+    ) {
         try {
             $tag = $this->mapper->findWithCount($id, $this->userId);
         } catch (Exception $e) {

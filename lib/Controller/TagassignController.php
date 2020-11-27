@@ -12,7 +12,8 @@ use OCP\AppFramework\Controller;
 use OCA\People\Db\Tagassign;
 use OCA\People\Db\TagassignMapper;
 
-class TagassignController extends Controller {
+class TagassignController extends Controller
+{
 
     private $mapper;
     private $userId;
@@ -48,9 +49,10 @@ class TagassignController extends Controller {
      * @param int $contactId
      * @param int $tagId
      */
-    public function create( int $contactId, 
-                            int $tagId)
-    {
+    public function create(
+        int $contactId,
+        int $tagId
+    ) {
         $tagAssign = new Tagassign();
         $tagAssign->setContactId($contactId);
         $tagAssign->setTagId($tagId);

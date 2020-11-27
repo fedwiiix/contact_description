@@ -7,7 +7,8 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version000002Date20200909125555 extends SimpleMigrationStep {
+class Version000002Date20200909125555 extends SimpleMigrationStep
+{
 
     /**
      * @param IOutput $output
@@ -64,7 +65,7 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             ]);
 
             $table->setPrimaryKey(['id']);
-            $table->addUniqueIndex(['user_id','name','last_name'], 'unique_contact');            
+            $table->addUniqueIndex(['user_id', 'name', 'last_name'], 'unique_contact');
         }
         if (!$schema->hasTable('people_tag')) {
             $table = $schema->createTable('people_tag');
@@ -90,9 +91,9 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
                 'length' => 1,
                 'default' => 0,
             ]);
-            
+
             $table->setPrimaryKey(['id']);
-            $table->addUniqueIndex(['user_id','name'], 'unique_tag');
+            $table->addUniqueIndex(['user_id', 'name'], 'unique_tag');
         }
         if (!$schema->hasTable('people_tag_assign')) {
             $table = $schema->createTable('people_tag_assign');
@@ -109,7 +110,7 @@ class Version000002Date20200909125555 extends SimpleMigrationStep {
             ]);
 
             $table->setPrimaryKey(['id']);
-            $table->addUniqueIndex(['contact_id','tag_id'], 'unique_tag');
+            $table->addUniqueIndex(['contact_id', 'tag_id'], 'unique_tag');
         }
         return $schema;
     }

@@ -1,13 +1,20 @@
 class SettingsClass {
     init() {
 
-        document.getElementById('import-file').addEventListener('change', this.importJson);
+        document.getElementById('import-file').addEventListener('change', this.prepareImportJson);
         document.getElementById('export-json-file').addEventListener('click', this.exportJson);
         document.getElementById('export-csv-file').addEventListener('click', this.exportCsv);
 
+        this.initSetting()
+
     }
 
-    importJson = (event) => {
+    initSetting() {
+        // clean db tables
+        ajaxRequest("/setting", "GET", null);
+    }
+
+    prepareImportJson = (event) => {
         var reader = new FileReader();
         reader.onload = (event) => { this.onReaderLoad(event) }
         reader.readAsText(event.target.files[0]);
@@ -15,19 +22,31 @@ class SettingsClass {
 
     onReaderLoad(event) {
         try {
-            var jsonObj = JSON.parse(event.target.result);
-
-
-
-            jsonObj.foreach(element => {
-                console.log(element)
-
-            })
-
+            // check json
+            JSON.parse(event.target.result);
         } catch (error) {
             toast("Bad file format", 3)
         }
 
+        let content = event.target.result;
+        confirmToast("do you want update if elements already exist?", () => {
+            this.importJson(content, true);
+        }, () => {
+            this.importJson(content, false);
+        });
+    }
+
+    importJson(json, update) {
+        ajaxRequest(
+            "/import",
+            "POST",
+            JSON.stringify({ json, update }),
+            () => {
+                this.resetDisplay()
+                toast("Contacts imported.", 4);
+            }, () => {
+                toast("An error occurred.", 4);
+            });
     }
 
     getExportData(callback) {
@@ -44,7 +63,6 @@ class SettingsClass {
 
     exportCsv = () => {
         this.getExportData((json) => {
-
             var data = this.convertToCSV(json)
             this.download('contacts.csv', data, 'text/csv')
         })
@@ -109,6 +127,11 @@ class SettingsClass {
         if (!str || !str.length) { return ''; }
         str = str.replace(/"/g, '""')
         return `"${str}"`
+    }
+
+    resetDisplay() {
+        User.showAll();
+        Tag.showAll();
     }
 }
 

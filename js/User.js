@@ -183,7 +183,11 @@ class UserClass {
     getFormToContact() {
         let json = {};
         this.contactKey.forEach((element) => {
-            json[element] = $(`#contact-insert-form #${element}`).val();
+            if (element != "date") {
+                json[element] = this.capitalize($(`#contact-insert-form #${element}`).val());
+            } else {
+                json[element] = $(`#contact-insert-form #${element}`).val();
+            }
         });
         json["birthNotif"] = $("#contact-insert-form #birthNotif").prop("checked") ?
             1 :
@@ -191,16 +195,15 @@ class UserClass {
         return json;
     }
 
+    capitalize(input) {
+        return input.charAt(0).toUpperCase() + input.slice(1);
+    }
+
     /************************** display contact **** */
 
     generateContactList(contact) {
         let letter = contact.name.charAt(0);
-        let n = parseInt(
-            (letter.toLowerCase().charCodeAt(0) -
-                97 +
-                (contact.lastName.charAt(0).toLowerCase().charCodeAt(0) - 97 || 12)) /
-            2
-        );
+        let n = parseInt((letter.toLowerCase().charCodeAt(0) - 97));
         let color = this.colorsArray[n];
         return `<a href="#" class="app-content-list-item" id="contact-${contact.id}">
                     <div class="app-content-list-item-icon" style="background-color: ${color}">${letter}</div>
@@ -216,6 +219,8 @@ class UserClass {
     }
 
     displayAllContactList(contacts) {
+        $("#contact-list").empty()
+        $("#all-tag .counter").html(contacts.length)
         contacts.forEach((contact) => {
             this.displayContactList(contact);
         });
@@ -282,6 +287,7 @@ class UserClass {
             (contact) => {
                 this.displayContactList(contact);
                 this.displayFirstContact();
+                this.updateTagCount(1)
             },
             (status) => {
                 if (status == 400) {
@@ -322,9 +328,12 @@ class UserClass {
     }
 
     remove(id) {
-        ajaxRequest("/contact/" + id, "DELETE", null, () => {
-            this.removeContactList(id);
-            this.displayFirstContact();
+        confirmToast("Are you sure?", () => {
+            ajaxRequest("/contact/" + id, "DELETE", null, () => {
+                this.removeContactList(id);
+                this.displayFirstContact();
+                this.updateTagCount(-1)
+            });
         });
     }
 
@@ -335,6 +344,11 @@ class UserClass {
     }
     sowAllContactListTag(tags) {
         TagAssign.displayAllContactListTag(tags);
+    }
+    updateTagCount(n) {
+        $("#tag-assigned-list .chip").each(function() {
+            Tag.updateTagCount(parseInt($(this).attr("tagid")), n)
+        });
     }
 }
 

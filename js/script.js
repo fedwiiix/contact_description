@@ -1,8 +1,8 @@
 $(function() {
+    Settings.init();
     Tag.init();
     User.init();
     TagAssign.init();
-    Settings.init();
 });
 
 /******************* ajax */
@@ -15,7 +15,9 @@ function ajaxRequest(url, methode, data, callBack, callBackError) {
             data,
         })
         .done(function(response) {
-            callBack(response);
+            if (callBack) {
+                callBack(response);
+            }
         })
         .fail(function(response, code) {
             if (callBackError) {
@@ -39,7 +41,7 @@ function closeToast() {
     $("#toast").animate({ top: "-60px", display: "none" }, 500).html("");
 }
 
-function confirmToast(text, yesCallback) {
+function confirmToast(text, yesCallback, noCallback) {
     text += `<button id="toast-confirm">Yes</button> 
             <button id="toast-unconfirm">No</button>`;
 
@@ -51,6 +53,9 @@ function confirmToast(text, yesCallback) {
     });
 
     $("#toast-unconfirm").click(() => {
+        if (noCallback) {
+            noCallback()
+        }
         closeToast();
     });
 }

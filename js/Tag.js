@@ -23,6 +23,7 @@ class TagClass {
     /************************************************ */
 
     displayAllTag(tags) {
+        $("#tag-list, #tag-favorite").empty()
         tags.forEach((tag) => {
             this.displayTag(tag);
         });
@@ -176,7 +177,7 @@ class TagClass {
             "#31cc7c",
             "#317ccc",
             "#ff7a66",
-            "#f1db50",
+            "#ffdc00",
             "#7c31cc",
             "#cc317c",
             "#3a3b3d",

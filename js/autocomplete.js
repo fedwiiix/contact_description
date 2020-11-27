@@ -2,8 +2,7 @@ function autocomplete(inp) {
     /*the autocomplete function takes two arguments,
       the text field element and an array of possible autocompleted values:*/
     var currentFocus;
-    var autocompleteList = []
-        /*execute a function when someone writes in the text field:*/
+    /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a,
             b,
@@ -23,7 +22,7 @@ function autocomplete(inp) {
         /*append the div element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
         /*for each item in the array...*/
-        let arr = autocompleteList;
+        let arr = getList();
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
@@ -75,8 +74,8 @@ function autocomplete(inp) {
         }
     });
 
-    inp.addEventListener("focus", function(e) {
-        autocompleteList = [];
+    function getList() {
+        let autocompleteList = [];
         // get list of unasigned tags
         let assignedId = TagAssign.getAssignedId();
         Tag.getTagList().forEach((tag) => {
@@ -84,7 +83,8 @@ function autocomplete(inp) {
                 autocompleteList.push(tag.name);
             }
         });
-    });
+        return autocompleteList;
+    }
 
     function addActive(x) {
         /*a function to classify an item as "active":*/

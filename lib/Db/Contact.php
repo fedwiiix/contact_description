@@ -1,11 +1,13 @@
 <?php
+
 namespace OCA\People\Db;
 
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 
-class Contact extends Entity implements JsonSerializable {
+class Contact extends Entity implements JsonSerializable
+{
 
     public $id;
     protected $userId;
@@ -18,7 +20,8 @@ class Contact extends Entity implements JsonSerializable {
     protected $birthNotif;
     protected $created;
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'id' => $this->id,
             'userId' => $this->userId,
