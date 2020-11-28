@@ -25,11 +25,11 @@ class SettingsClass {
             // check json
             JSON.parse(event.target.result);
         } catch (error) {
-            toast("Bad file format", 3)
+            toast(t(AppName, "Bad file format"), 3)
         }
 
         let content = event.target.result;
-        confirmToast("do you want update if elements already exist?", () => {
+        confirmToast(t(AppName, "Do you want an update if items already exist?"), () => {
             this.importJson(content, true);
         }, () => {
             this.importJson(content, false);
@@ -45,7 +45,7 @@ class SettingsClass {
                 this.resetDisplay()
                 toast("Contacts imported.", 4);
             }, () => {
-                toast("An error occurred.", 4);
+                toast(t(AppName, "An error occurred."), 4);
             });
     }
 
@@ -130,7 +130,7 @@ class SettingsClass {
     }
 
     resetDisplay() {
-        User.showAll();
+        Contact.showAll();
         Tag.showAll();
     }
 }

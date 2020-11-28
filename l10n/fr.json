@@ -1,0 +1,27 @@
+{
+    "translations": {
+
+        "Add new contact": "Ajouter un contact",
+        "All Contacts": "Tous les contactes",
+        "Favorites tags": "Tags favoris",
+        "Tags": "Tags",
+
+        "Settings": "Paramètres",
+        "Import from json file": "Importer depuis un fichier json",
+        "Export to json file": "Exporter vers un fichier json",
+        "Export files to csv file": "Exporter vers un fichier csv",
+
+        "Edit": "Éditer",
+        "Remove": "Suprimer",
+
+        "Name": "Prénom",
+        "Last name": "Nom",
+        "Work": "Travail",
+        "Hobbies": "Passions",
+        "Birth": "Aniversaire",
+        "Recall birth": "Notifier l'anniversaire",
+        "Description": "Description"
+
+    },
+    "pluralForm": "nplurals=2; plural=(n > 1);"
+}

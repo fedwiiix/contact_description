@@ -1,4 +1,4 @@
-class UserClass {
+class ContactClass {
     constructor() {
         this.createMode = true;
         this.contactKey = [
@@ -12,8 +12,8 @@ class UserClass {
             "birthNotif",
         ];
         this.contactKeyRequirement = {
-            name: "name",
-            description: "people",
+            name: "Name",
+            description: "Description",
         };
         this.colorsArray = [
             "#2196f3",
@@ -157,7 +157,7 @@ class UserClass {
         this.formCreateMode = false;
         $("#contact-form").show();
         $("#contact-preview").hide();
-        $("#contact-form #submit").val("update contact");
+        $("#contact-form #submit").val(t(AppName, "Update contact"));
         this.contactKey.forEach((element) => {
             if (contact.hasOwnProperty(element)) {
                 $(`#contact-form #${element}`).val(contact[element]);
@@ -173,7 +173,7 @@ class UserClass {
         this.formCreateMode = true;
         $("#contact-form").show();
         $("#contact-preview").hide();
-        $("#contact-form #submit").val("add new contact");
+        $("#contact-form #submit").val(t(AppName, "Add new contact"));
         this.contactKey.forEach((element) => {
             $(`#contact-form #${element}`).val("");
         });
@@ -220,10 +220,16 @@ class UserClass {
 
     displayAllContactList(contacts) {
         $("#contact-list").empty()
-        $("#all-tag .counter").html(contacts.length)
         contacts.forEach((contact) => {
             this.displayContactList(contact);
         });
+        this.displayContactCount(contacts.length)
+    }
+
+    displayContactCount(n) {
+        let e = $("#all-tag .counter")
+        let count = (e.html() == '' ? 0 : parseInt(e.html())) + n
+        e.html(count < 0 ? 0 : count)
     }
 
     displayContactList(contact) {
@@ -287,13 +293,13 @@ class UserClass {
             (contact) => {
                 this.displayContactList(contact);
                 this.displayFirstContact();
-                this.updateTagCount(1)
+                this.displayContactCount(1)
             },
             (status) => {
                 if (status == 400) {
-                    toast("This contact already exist.", 4);
+                    toast(t(AppName, "This contact already exist."), 4);
                 } else {
-                    toast("An error occurred.", 4);
+                    toast(t(AppName, "An error occurred."), 4);
                 }
             }
         );
@@ -302,7 +308,8 @@ class UserClass {
     validContact(contact) {
         for (let k in this.contactKeyRequirement) {
             if (!contact[k].length) {
-                toast(`You need to complete ${this.contactKeyRequirement[k]}.`, 3);
+                let name = t(AppName, this.contactKeyRequirement[k]);
+                toast(t(AppName, "You need to complete {name}.", { name }), 3);
                 return 1;
             }
         }
@@ -319,20 +326,21 @@ class UserClass {
             },
             (status) => {
                 if (status == 400) {
-                    toast("This contact already exist.", 4);
+                    toast(t(AppName, "This contact already exist."), 4);
                 } else {
-                    toast("An error occurred.", 4);
+                    toast(t(AppName, "An error occurred."), 4);
                 }
             }
         );
     }
 
     remove(id) {
-        confirmToast("Are you sure?", () => {
+        confirmToast(t(AppName, "Are you sure?"), () => {
             ajaxRequest("/contact/" + id, "DELETE", null, () => {
                 this.removeContactList(id);
                 this.displayFirstContact();
                 this.updateTagCount(-1)
+                this.displayContactCount(-1)
             });
         });
     }
@@ -352,4 +360,4 @@ class UserClass {
     }
 }
 
-var User = new UserClass();
+var Contact = new ContactClass();

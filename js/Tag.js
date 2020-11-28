@@ -12,7 +12,7 @@ class TagClass {
         });
 
         $("#all-tag").click(function() {
-            User.searchByType();
+            Contact.searchByType();
         });
     }
 
@@ -57,20 +57,20 @@ class TagClass {
                         <a href="#" id="favorite-tag-${tag.id}">
                             <span class="icon-add"></span>
                             <span>${
-                              tag.favorite == 1 ? "Remove" : "Add"
-                            } to favorite</span>
+                              tag.favorite == 1 ? t(AppName,"Remove to favorite") : t(AppName,"Add to favorite")
+                            }</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" id="remove-tag-${tag.id}">
                             <span class="icon-delete"></span>
-                            <span>Remove</span>
+                            <span>${t(AppName,"Remove")}</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" id="edit-tag-${tag.id}">
                             <span class="icon-rename"></span>
-                            <span>Edit</span>
+                            <span>${t(AppName,"Edit")}</span>
                         </a>
                     </li>
                 </ul>
@@ -80,7 +80,7 @@ class TagClass {
         $(`#tag-${tag.favorite == 1 ? "favorite" : "list"}`).prepend(html);
 
         $(`#tag-${tag.id}`).click(() => {
-            User.searchByType(tag.id);
+            Contact.searchByType(tag.id);
         });
 
         $(`#tag-open-menu-${tag.id}`).click((event) => {
@@ -188,9 +188,8 @@ class TagClass {
         });
 
         $(target).append(`<form id="tag-form">
-            <input id="input-create-tag" type="text" placeholder="New tag" value="${
-              tag ? tag.name : ""
-            }" autocomplete="off">
+            <input id="input-create-tag" type="text" placeholder="${tag ? "" : t(AppName,"New tag")}" 
+                value="${tag ? tag.name : ""}" autocomplete="off">
             <input type="submit" value=" " class="icon-confirm">
             <div class="colorpicker">
                 <ul class="colorpicker-list">
@@ -268,7 +267,7 @@ class TagClass {
                 if (status == 400) {
                     toast("This tag already exist.", 4);
                 } else {
-                    toast("An error occurred.", 4);
+                    toast(t(AppName, "An error occurred."), 4);
                 }
             }
         );
@@ -291,7 +290,7 @@ class TagClass {
                 if (status == 400) {
                     toast("This tag already exist.", 4);
                 } else {
-                    toast("An error occurred.", 4);
+                    toast(t(AppName, "An error occurred."), 4);
                 }
             }
         );
@@ -311,7 +310,7 @@ class TagClass {
     }
 
     remove(id) {
-        confirmToast("Are you sure?", () => {
+        confirmToast(t(AppName, "Are you sure?"), () => {
             ajaxRequest("/tag/" + id, "DELETE", null, () => {
                 this.hideEntryMenu();
                 this.removeTag(id);

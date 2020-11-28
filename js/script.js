@@ -1,7 +1,9 @@
+var AppName = "people";
+
 $(function() {
     Settings.init();
     Tag.init();
-    User.init();
+    Contact.init();
     TagAssign.init();
 });
 
@@ -23,7 +25,7 @@ function ajaxRequest(url, methode, data, callBack, callBackError) {
             if (callBackError) {
                 callBackError(response.status);
             } else {
-                toast("An error occurred.", 4);
+                toast(t(AppName, "An error occurred."), 4);
             }
         });
 }
@@ -42,8 +44,8 @@ function closeToast() {
 }
 
 function confirmToast(text, yesCallback, noCallback) {
-    text += `<button id="toast-confirm">Yes</button> 
-            <button id="toast-unconfirm">No</button>`;
+    text += `<button id="toast-confirm">${t(AppName, "Yes")}</button> 
+            <button id="toast-unconfirm">${t(AppName, "No")}</button>`;
 
     toast(text, 6);
 

@@ -134,7 +134,7 @@ class TagAssignClass {
     }
 
     removeContactListTag(tagId) {
-        $(`#contact-${User.getCurrentId()} #mini-chip-${tagId}`).remove();
+        $(`#contact-${Contact.getCurrentId()} #mini-chip-${tagId}`).remove();
     }
 
     removeAllContactListTag(tagId) {
@@ -147,7 +147,7 @@ class TagAssignClass {
         ajaxRequest(
             "/tagassign",
             "POST",
-            JSON.stringify({ contactId: User.getCurrentId(), tagId }),
+            JSON.stringify({ contactId: Contact.getCurrentId(), tagId }),
             (tag) => {
                 // give name
                 tag.name = name;
@@ -158,9 +158,9 @@ class TagAssignClass {
             },
             (status) => {
                 if (status == 400) {
-                    toast("This tag already exist.", 4);
+                    toast(t(AppName, "This tag already exist."), 4);
                 } else {
-                    toast("An error occurred.", 4);
+                    toast(t(AppName, "An error occurred."), 4);
                 }
             }
         );
