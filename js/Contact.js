@@ -13,7 +13,6 @@ class ContactClass {
         ];
         this.contactKeyRequirement = {
             name: "Name",
-            description: "Description",
         };
         this.colorsArray = [
             "#2196f3",
@@ -54,6 +53,28 @@ class ContactClass {
         this.initSearch();
     }
 
+    getList() {
+        let contactList = [];
+        var self = this;
+        $("#contact-list .app-content-list-item-line-one").each(function() {
+            if (this.id != self.currentId)
+                contactList.push($(this).html())
+        });
+        return contactList;
+    }
+
+    getContactIdByName(name) {
+        if (name == "") {
+            return null
+        }
+        let id = null;
+        $("#contact-list .app-content-list-item-line-one").each(function() {
+            if ($(this).html() == name)
+                id = parseInt(this.id);
+        });
+        return id;
+    }
+
     initPreviewMenu() {
         // display/hide preview menu
         $("#preview-setting").click((event) => {
@@ -61,7 +82,7 @@ class ContactClass {
             $("#preview-menu").show();
         });
         $(window).click(() => {
-            if ($("#preview-menu").is(":visible")) {
+            if ($("#preview-menu").css("display") != "none") {
                 $("#preview-menu").hide();
             }
         });
@@ -73,16 +94,17 @@ class ContactClass {
         $("#preview-menu-remove").click(() => {
             this.remove(this.currentId);
         });
+        $("#preview-menu-link").click(() => {
+            this.displayLink()
+        });
     }
 
     initForm() {
         $("#create-contact").click(() => {
             this.prepareCreateContactForm();
         });
-        $("#contact-form-close").click(() => {
-            this.show(this.currentId, (rep) => {
-                this.addContactToPreview(rep.contact);
-            });
+        $("[id=contact-form-close]").click(() => {
+            this.displayContactPreview(this.currentId);
         });
         $("#contact-form").submit((event) => {
             event.preventDefault();
@@ -101,7 +123,7 @@ class ContactClass {
                         .find(".app-content-list-item-line-one")
                         .html()
                         .toLowerCase()
-                        .indexOf(value) == -1
+                        .search(value) == -1
                     ) {
                         $(this).hide();
                     } else {
@@ -138,7 +160,7 @@ class ContactClass {
 
     addContactToPreview(json) {
         $("#contact-preview").show();
-        $("#contact-form").hide();
+        $("#contact-form, #contact-link").hide();
         this.currentId = json.id;
         this.contactKey.forEach((element) => {
             if (json.hasOwnProperty(element)) {
@@ -147,6 +169,7 @@ class ContactClass {
                 else $(`#contact-preview #${element}`).html(json[element] || "&nbsp;");
             }
         });
+        $(".header .title").html(`${json.name} ${json.lastName}`)
         $(`#contact-preview #birthNotif-preview`).prop(
             "checked",
             json["birthNotif"] == 1 ? true : false
@@ -156,7 +179,7 @@ class ContactClass {
     addContactToForm(contact) {
         this.formCreateMode = false;
         $("#contact-form").show();
-        $("#contact-preview").hide();
+        $("#contact-preview, #contact-link").hide();
         $("#contact-form #submit").val(t(AppName, "Update contact"));
         this.contactKey.forEach((element) => {
             if (contact.hasOwnProperty(element)) {
@@ -172,7 +195,7 @@ class ContactClass {
     prepareCreateContactForm() {
         this.formCreateMode = true;
         $("#contact-form").show();
-        $("#contact-preview").hide();
+        $("#contact-preview, #contact-link").hide();
         $("#contact-form #submit").val(t(AppName, "Add new contact"));
         this.contactKey.forEach((element) => {
             $(`#contact-form #${element}`).val("");
@@ -189,9 +212,7 @@ class ContactClass {
                 json[element] = $(`#contact-insert-form #${element}`).val();
             }
         });
-        json["birthNotif"] = $("#contact-insert-form #birthNotif").prop("checked") ?
-            1 :
-            0;
+        json["birthNotif"] = $("#contact-insert-form #birthNotif").prop("checked") ? 1 : 0;
         return json;
     }
 
@@ -199,15 +220,22 @@ class ContactClass {
         return input.charAt(0).toUpperCase() + input.slice(1);
     }
 
+    displayLink() {
+        $("#contact-link #link-list").empty()
+        $("#contact-link").show();
+        $("#contact-preview, #contact-form").hide();
+        Link.displayLinkSection(this.currentId)
+    }
+
     /************************** display contact **** */
 
     generateContactList(contact) {
         let letter = contact.name.charAt(0);
         let n = parseInt((letter.toLowerCase().charCodeAt(0) - 97));
-        let color = this.colorsArray[n];
+        let color = this.colorsArray[n] || this.colorsArray[0];
         return `<a href="#" class="app-content-list-item" id="contact-${contact.id}">
                     <div class="app-content-list-item-icon" style="background-color: ${color}">${letter}</div>
-                    <div class="app-content-list-item-line-one">${contact.name} ${contact.lastName}</div>
+                    <div class="app-content-list-item-line-one" id="${contact.id}">${contact.name} ${contact.lastName}</div>
                     <div class="app-content-list-item-line-two mini-tag-block"></div>
                 </a>`;
     }
@@ -240,7 +268,7 @@ class ContactClass {
     updateContactList(contact) {
         let tags = $(`#contact-${contact.id} .mini-tag-block`).html();
         $(`#contact-${contact.id}`).replaceWith(this.generateContactList(contact));
-        $(`#contact-${contact.id} .mini-tag-block`).html(tags);
+        $(`#contact-${contact.id} .mini-tag-block`).html(tags).show();
         this.addContactListEvent(contact.id);
     }
 
@@ -252,6 +280,7 @@ class ContactClass {
         this.show(id, (rep) => {
             this.addContactToPreview(rep.contact);
             this.showTagAssignPreview(rep.assign);
+            this.showLinkPreview(rep.link);
         });
     }
 
@@ -297,9 +326,9 @@ class ContactClass {
             },
             (status) => {
                 if (status == 400) {
-                    toast(t(AppName, "This contact already exist."), 4);
+                    toast(t(AppName, "This contact already exist."), 3);
                 } else {
-                    toast(t(AppName, "An error occurred."), 4);
+                    toast(t(AppName, "An error occurred."), 3);
                 }
             }
         );
@@ -326,9 +355,9 @@ class ContactClass {
             },
             (status) => {
                 if (status == 400) {
-                    toast(t(AppName, "This contact already exist."), 4);
+                    toast(t(AppName, "This contact already exist."), 3);
                 } else {
-                    toast(t(AppName, "An error occurred."), 4);
+                    toast(t(AppName, "An error occurred."), 3);
                 }
             }
         );
@@ -357,6 +386,9 @@ class ContactClass {
         $("#tag-assigned-list .chip").each(function() {
             Tag.updateTagCount(parseInt($(this).attr("tagid")), n)
         });
+    }
+    showLinkPreview(links) {
+        Link.showLinkPreview(links)
     }
 }
 

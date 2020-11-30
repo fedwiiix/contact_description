@@ -8,6 +8,22 @@
     margin: 10px 10px 6px 10px;
 }
 
+.header {
+    display: block;
+    width: 100%;
+    height: 50px;
+}
+
+.header span:not(.title) {
+    float: right;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.header .title {
+    font-size: 20px;
+}
+
 
 /************* color picker **/
 
@@ -65,7 +81,7 @@
 
 /*****************************************/
 
-.mini-tag-block {
+.app-content-list .app-content-list-item .mini-tag-block {
     display: none;
 }
 
@@ -99,7 +115,8 @@ label {
 }
 
 #contact-form,
-#contact-preview {
+#contact-preview,
+#contact-link {
     width: 90%;
     margin: calc(5% + 20px);
     display: none;
@@ -137,13 +154,15 @@ label {
     background-color: var(--color-primary-element) !important;
 }
 
+
+/*
 #contact-form-close,
 #preview-setting {
     position: absolute;
     right: 5%;
     top: 5%;
     cursor: pointer;
-}
+}*/
 
 #preview-menu {
     position: absolute;
@@ -156,7 +175,7 @@ label {
 
 .tag-preview {
     width: 100%;
-    padding-bottom: 20px;
+    padding-bottom: 40px;
 }
 
 #tag-assigned-list {
@@ -191,6 +210,52 @@ label {
 
 #tag-assign-form input[type="submit"] {
     border-radius: 0 25px 25px 0 !important;
+    vertical-align: bottom;
+    position: relative;
+    left: -5px;
+}
+
+
+/********************** link form ********/
+
+.link-preview {
+    margin: 50px 0;
+    padding-top: 50px;
+    border-top: 1px solid var(--color-border);
+}
+
+#contact-link-form {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#contact-link-form input:not([type="checkbox"]),
+#contact-link-form select {
+    width: 95%;
+}
+
+#contact-link-form #link-assignautocomplete-list {
+    top: auto;
+}
+
+.app-content-list.link {
+    width: 100%;
+    min-width: auto;
+    min-height: auto;
+    display: contents;
+    border: 0;
+}
+
+#contact-link .app-content-list-item .icon-rename,
+#contact-link .app-content-list-item .icon-delete {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    cursor: pointer;
+}
+
+#contact-link .app-content-list-item .icon-rename {
+    right: 50px;
 }
 
 
@@ -203,12 +268,6 @@ label {
 
 .autocomplete input {
     width: 200px;
-}
-
-.autocomplete input[type="submit"] {
-    vertical-align: bottom;
-    position: relative;
-    left: -5px;
 }
 
 .autocomplete-items {

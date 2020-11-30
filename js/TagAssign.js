@@ -11,7 +11,18 @@ class TagAssignClass {
     /******************************** autocomplete when assign tags */
 
     initAutocomplete() {
-        autocomplete(document.getElementById("assign-tag"));
+        autocomplete(document.getElementById("tag-assign"), TagAssign);
+    }
+
+    getList() {
+        let autocompleteList = [];
+        // get list of unasigned tags
+        Tag.getTagList().forEach((tag) => {
+            if (!this.assignedId.includes(tag.id)) {
+                autocompleteList.push(tag.name);
+            }
+        });
+        return autocompleteList;
     }
 
     getAssignedId() {
@@ -23,7 +34,7 @@ class TagAssignClass {
     initForm() {
         $("#tag-assign-form").submit((event) => {
             event.preventDefault();
-            let inputTagName = $("#tag-assign-form #assign-tag").val();
+            let inputTagName = $("#tag-assign-form #tag-assign").val();
 
             this.isAssigned(
                 inputTagName,
@@ -35,7 +46,7 @@ class TagAssignClass {
                     );
                 },
                 () => {
-                    $("#tag-assign-form #assign-tag").val("");
+                    $("#tag-assign-form #tag-assign").val("");
                 }
             );
         });
@@ -108,7 +119,7 @@ class TagAssignClass {
     cleanPreviewTag() {
         this.cleanAssignedId();
         $("#tag-assigned-list").empty();
-        $("#assign-tag").val('')
+        $("#tag-assign").val('')
     }
 
     /********************************* contact tags */
@@ -139,6 +150,9 @@ class TagAssignClass {
 
     removeAllContactListTag(tagId) {
         $(`[id=mini-chip-${tagId}]`).remove();
+        if ($(`#contact-${tag.contactId} .mini-tag-block`).is(':empty')) {
+            $(`#contact-${tag.contactId} .mini-tag-block`).hide()
+        }
     }
 
     /****************************************** */
@@ -158,9 +172,9 @@ class TagAssignClass {
             },
             (status) => {
                 if (status == 400) {
-                    toast(t(AppName, "This tag already exist."), 4);
+                    toast(t(AppName, "This tag already exist."), 3);
                 } else {
-                    toast(t(AppName, "An error occurred."), 4);
+                    toast(t(AppName, "An error occurred."), 3);
                 }
             }
         );

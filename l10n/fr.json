@@ -13,6 +13,9 @@
 
         "Edit": "Éditer",
         "Remove": "Suprimer",
+        "Links": "Liens",
+
+        "Search": "Recherche",
 
         "Name": "Prénom",
         "Last name": "Nom",
@@ -20,7 +23,13 @@
         "Hobbies": "Passions",
         "Birth": "Aniversaire",
         "Recall birth": "Notifier l'anniversaire",
-        "Description": "Description"
+        "Description": "Description",
+
+        "Link to contact": "Lier à un contact",
+        "Type": "Type",
+        "Contact": "Contact",
+        "Add link": "Ajouter le lien",
+        "Update link": "Modifier le lien"
 
     },
     "pluralForm": "nplurals=2; plural=(n > 1);"

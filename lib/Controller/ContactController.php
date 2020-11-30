@@ -14,18 +14,22 @@ use OCA\People\Db\ContactMapper;
 
 use OCA\People\Db\TagassignMapper;
 
+use OCA\People\Controller\LinkController;
+
 class ContactController extends Controller
 {
 
     private $mapper;
     private $userId;
 
-    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, TagassignMapper $assignMapper, $UserId)
+    public function __construct(string $AppName, IRequest $request, ContactMapper $mapper, TagassignMapper $assignMapper, LinkController $linkController, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->mapper = $mapper;
         $this->userId = $UserId;
         $this->assignMapper = $assignMapper;
+        $this->linkController = $linkController;
+
     }
 
     /**
@@ -54,11 +58,22 @@ class ContactController extends Controller
             $rep = (object)[];
             $rep->assign = $this->assignMapper->findForContact($id);
             $rep->contact = $this->mapper->find($id, $this->userId);
+            $rep->link = $this->linkController->showAll($id, false);
             return new DataResponse($rep);
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_NOT_FOUND);
         }
     }
+
+    /*private function getLinks(){
+        $array = array();
+        $links = $this->mapper->findAll();
+        foreach ($links as $link) {
+            if ($link->getContactId() == $id || $link->getContactIdBis() == $id) {
+                array_push($array, $this->generateResponse($link, $id));
+            }
+        }
+    }*/
 
     /**
      * @NoAdminRequired
@@ -163,6 +178,8 @@ class ContactController extends Controller
         foreach ($assignedTag as $key => $value) {
             $this->assignMapper->delete($value);
         }
+        // remove links
+        $this->linkController->destroyByContact($id);
         // remove contact
         try {
             $contact = $this->mapper->find($id, $this->userId);

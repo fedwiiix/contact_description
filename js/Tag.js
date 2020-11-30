@@ -267,7 +267,7 @@ class TagClass {
                 if (status == 400) {
                     toast("This tag already exist.", 4);
                 } else {
-                    toast(t(AppName, "An error occurred."), 4);
+                    toast(t(AppName, "An error occurred."), 3);
                 }
             }
         );
@@ -290,7 +290,7 @@ class TagClass {
                 if (status == 400) {
                     toast("This tag already exist.", 4);
                 } else {
-                    toast(t(AppName, "An error occurred."), 4);
+                    toast(t(AppName, "An error occurred."), 3);
                 }
             }
         );

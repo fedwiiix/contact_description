@@ -7,7 +7,7 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version000002Date20200909125555 extends SimpleMigrationStep
+class Version000004Date20200911225555 extends SimpleMigrationStep
 {
 
     /**
@@ -111,6 +111,35 @@ class Version000002Date20200909125555 extends SimpleMigrationStep
 
             $table->setPrimaryKey(['id']);
             $table->addUniqueIndex(['contact_id', 'tag_id'], 'unique_tag');
+        }
+        if (!$schema->hasTable('people_link')) {
+            $table = $schema->createTable('people_link');
+            $table->addColumn('id', 'integer', [
+                'autoincrement' => true,
+                'notnull' => true,
+                'unsigned' => true,
+            ]);
+            $table->addColumn('contact_id', 'integer', [
+                'notnull' => true,
+            ]);
+            $table->addColumn('contact_id_bis', 'integer', [
+                'notnull' => true,
+            ]);
+            $table->addColumn('type', 'integer', [
+                'notnull' => true,
+                'length' => 2,
+            ]);
+            $table->addColumn('birth', 'string', [
+                'notnull' => true,
+                'length' => 10,
+            ]);
+            $table->addColumn('birth_notif', 'integer', [
+                'notnull' => true,
+                'length' => 1,
+            ]);
+
+            $table->setPrimaryKey(['id']);
+            $table->addUniqueIndex(['contact_id', 'contact_id_bis'], 'unique_tag');
         }
         return $schema;
     }

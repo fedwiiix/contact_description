@@ -5,6 +5,7 @@ $(function() {
     Tag.init();
     Contact.init();
     TagAssign.init();
+    Link.init();
 });
 
 /******************* ajax */
@@ -25,7 +26,7 @@ function ajaxRequest(url, methode, data, callBack, callBackError) {
             if (callBackError) {
                 callBackError(response.status);
             } else {
-                toast(t(AppName, "An error occurred."), 4);
+                toast(t(AppName, "An error occurred."), 3);
             }
         });
 }
@@ -40,7 +41,10 @@ function toast(text, time) {
 }
 
 function closeToast() {
-    $("#toast").animate({ top: "-60px", display: "none" }, 500).html("");
+    $("#toast").animate({ top: "-60px", display: "none" }, 200);
+    setTimeout(() => {
+        $("#toast").html("");
+    }, 200);
 }
 
 function confirmToast(text, yesCallback, noCallback) {

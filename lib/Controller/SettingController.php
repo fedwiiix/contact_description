@@ -17,18 +17,21 @@ use OCA\People\Db\TagMapper;
 use OCA\People\Db\Tagassign;
 use OCA\People\Db\Tag;
 
+use OCA\People\Controller\LinkController;
+
 class SettingController extends Controller
 {
 
     private $userId;
 
-    public function __construct(string $AppName, IRequest $request, ContactMapper $contactMapper, TagassignMapper $assignMapper, TagMapper $tagMapper, $UserId)
+    public function __construct(string $AppName, IRequest $request, ContactMapper $contactMapper, TagassignMapper $assignMapper, TagMapper $tagMapper, LinkController $linkController, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->contactMapper = $contactMapper;
         $this->userId = $UserId;
         $this->assignMapper = $assignMapper;
         $this->tagMapper = $tagMapper;
+        $this->linkController = $linkController;
     }
 
     /**
@@ -37,6 +40,7 @@ class SettingController extends Controller
     public function index()
     {
         try {
+            $this->linkController->clean();
             return new DataResponse($this->assignMapper->cleanAssigned());
         } catch (Exception $e) {
             return new DataResponse([], Http::STATUS_BAD_REQUEST);
@@ -66,6 +70,9 @@ class SettingController extends Controller
                         ));
                     }
                 }
+
+                $link = $this->linkController->showAll($contact->id, true);
+
                 array_push($array, array(
                     "name" => is_null($contact->getName()) ? '' : $contact->getName(),
                     "last_name" => is_null($contact->getLastName()) ? '' : $contact->getLastName(),
@@ -74,7 +81,8 @@ class SettingController extends Controller
                     "hobbies" => is_null($contact->getHobbies()) ? '' : $contact->getHobbies(),
                     "birth" => is_null($contact->getBirth()) ? '' : $contact->getBirth(),
                     "birth_notif" => is_null($contact->getBirthNotif()) ? '' : $contact->getBirthNotif(),
-                    "tag" => $assigned
+                    "tag" => $assigned,
+                    "link" => $link
                 ));
             }
             return new DataResponse($array);
@@ -171,6 +179,27 @@ class SettingController extends Controller
                         } catch (Exception $e) {
                         }
                     }
+                }
+            }
+        }
+
+        // create links
+        foreach ($jsonArray as $c) {
+
+            $contact = $this->contactMapper->findByName($c->name, $c->last_name, $this->userId);
+
+            foreach ($c->link as $l) {
+                try {
+                    $contactBis = $this->contactMapper->findByName($l->name, $l->last_name, $this->userId);
+
+                    $this->linkController->create(
+                        $contact->id,
+                        $contactBis->id,
+                        $l->type,
+                        $l->birth,
+                        intval($l->birth_notif)
+                    );
+                } catch (Exception $e) {
                 }
             }
         }

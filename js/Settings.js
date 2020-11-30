@@ -45,7 +45,7 @@ class SettingsClass {
                 this.resetDisplay()
                 toast("Contacts imported.", 4);
             }, () => {
-                toast(t(AppName, "An error occurred."), 4);
+                toast(t(AppName, "An error occurred."), 3);
             });
     }
 

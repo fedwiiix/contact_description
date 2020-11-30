@@ -32,6 +32,11 @@ return [
         ['name' => 'tagassign#show', 'url' => '/tagassign/{id}', 'verb' => 'GET'],
         ['name' => 'tagassign#create', 'url' => '/tagassign', 'verb' => 'POST'],
         ['name' => 'tagassign#destroy', 'url' => '/tagassign/{id}', 'verb' => 'DELETE'],
+        
+        ['name' => 'link#show', 'url' => '/link/{id}', 'verb' => 'GET'],
+        ['name' => 'link#create', 'url' => '/link', 'verb' => 'POST'],
+        ['name' => 'link#update', 'url' => '/link/{id}', 'verb' => 'PUT'],
+        ['name' => 'link#destroy', 'url' => '/link/{id}', 'verb' => 'DELETE'],
 
     ]
 ];
