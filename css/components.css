@@ -78,6 +78,19 @@
     margin: 20px 5%;
 }
 
+@media only screen and (max-width: 1024px) {
+    .app-content-list {
+        max-height: calc(100vh - 50px)!important;
+    }
+    #contact-seach input {
+        margin: 6px 5% 10px 45px;
+        width: calc(95% - 45px);
+    }
+    #app-navigation-toggle {
+        position: absolute;
+    }
+}
+
 
 /*****************************************/
 
@@ -118,7 +131,7 @@ label {
 #contact-preview,
 #contact-link {
     width: 90%;
-    margin: calc(5% + 20px);
+    padding: calc(5% + 20px);
     display: none;
 }
 
@@ -154,20 +167,23 @@ label {
     background-color: var(--color-primary-element) !important;
 }
 
-
-/*
-#contact-form-close,
-#preview-setting {
-    position: absolute;
-    right: 5%;
-    top: 5%;
-    cursor: pointer;
-}*/
-
 #preview-menu {
     position: absolute;
-    right: calc(5% - 15px);
-    top: calc(5% + 40px);
+    right: calc(5% + 22px);
+    top: calc(5% + 55px);
+}
+
+@media only screen and (max-width: 1024px) {
+    #contact-form,
+    #contact-preview,
+    #contact-link {
+        min-width: 100%;
+        position: relative;
+        background-color: var(--color-main-background);
+    }
+    #preview-menu {
+        top: calc(5% + 30px);
+    }
 }
 
 

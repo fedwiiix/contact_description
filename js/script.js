@@ -70,12 +70,15 @@ function confirmToast(text, yesCallback, noCallback) {
 
 function parseMarkdown(md) {
     //ul
-    md = md.replace(/^\s*\n\*/gm, "<ul>\n*");
-    md = md.replace(/^(\*.+)\s*\n([^\*])/gm, "$1\n</ul>\n\n$2");
-    md = md.replace(/^\*(.+)/gm, "<li>$1</li>");
+    md = md.replace(/^\s*\n\*/gm, "<ul>");
+    md = md.replace(/^(\*.+)\s*\n([^\*])/gm, "$1</ul>$2");
+    md = md.replace(/^\*(.+)\n?/gm, "<li>$1</li>");
 
     //hr
     md = md.replace(/---+/gm, "<hr>");
+
+    //br
+    md = md.replace(/\n/gm, "<br>");
 
     //h
     md = md.replace(/[\#]{3}(.+)/g, "<h3>$1</h3>");

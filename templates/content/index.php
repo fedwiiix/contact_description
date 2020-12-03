@@ -9,6 +9,30 @@
     <div class="header">
         <span class="title"></span>
         <span class="icon-more" id="preview-setting"></span>
+        <div>
+            <div class="popovermenu" id="preview-menu">
+                <ul>
+                    <li id="preview-menu-edit">
+                        <a>
+                            <span class="icon-rename"></span>
+                            <span><?php echo p($l->t('Edit')); ?></span>
+                        </a>
+                    </li>
+                    <li id="preview-menu-link">
+                        <a>
+                            <span class="icon-link"></span>
+                            <span><?php echo p($l->t('Links')); ?></span>
+                        </a>
+                    </li>
+                    <li id="preview-menu-remove">
+                        <a>
+                            <span class="icon-delete"></span>
+                            <span><?php echo p($l->t('Remove')); ?></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="tag-preview">
         <div id="tag-assigned-list"></div>
@@ -16,30 +40,6 @@
             <input id="tag-assign" type="text" placeholder="tag" autocomplete="off">
             <input type="submit" value="" class="icon-confirm">
         </form>
-    </div>
-    <div>
-        <div class="popovermenu" id="preview-menu">
-            <ul>
-                <li id="preview-menu-edit">
-                    <a>
-                        <span class="icon-rename"></span>
-                        <span><?php echo p($l->t('Edit')); ?></span>
-                    </a>
-                </li>
-                <li id="preview-menu-link">
-                    <a>
-                        <span class="icon-link"></span>
-                        <span><?php echo p($l->t('Links')); ?></span>
-                    </a>
-                </li>
-                <li id="preview-menu-remove">
-                    <a>
-                        <span class="icon-delete"></span>
-                        <span><?php echo p($l->t('Remove')); ?></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
     </div>
     <div class="col-6">
         <label><?php echo p($l->t('Work')); ?></label>

@@ -200,7 +200,7 @@ class ContactClass {
         this.contactKey.forEach((element) => {
             $(`#contact-form #${element}`).val("");
         });
-        $(`#contact-form #birthNotif`).prop("checked", false);
+        $(`#contact-form #birthNotif`).prop("checked", true);
     }
 
     getFormToContact() {

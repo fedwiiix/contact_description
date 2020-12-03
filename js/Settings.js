@@ -6,7 +6,6 @@ class SettingsClass {
         document.getElementById('export-csv-file').addEventListener('click', this.exportCsv);
 
         this.initSetting()
-
     }
 
     initSetting() {
@@ -111,7 +110,11 @@ class SettingsClass {
 
                     let newVal = ""
                     val.forEach(element => {
-                        newVal += element.name + ',';
+                        if (element.last_name) {
+                            newVal += element.name + ' ' + element.last_name + ',';
+                        } else {
+                            newVal += element.name + ',';
+                        }
                     })
                     line += (line == '' ? '' : ',') + this.csvCleanString(newVal.slice(0, -1));
                 } else {

@@ -55,7 +55,7 @@ class LinkClass {
     resetForm() {
         $("#link-assign, #link-birth").val('');
         $("#link-select").val(0);
-        $("#link-birthNotif").prop("checked", false)
+        $("#link-birthNotif").prop("checked", true)
         $("#contact-link #submit").val(t(AppName, "Add link"))
         this.updateLinkSelect()
         this.updateId = -1;
