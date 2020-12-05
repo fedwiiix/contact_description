@@ -56,6 +56,8 @@
         </div>
     </div>
     <div class="col-12">
+        <label><?php echo p($l->t('Address')); ?></label>
+        <p id="address"></p>
         <label><?php echo p($l->t('Description')); ?></label>
         <p id="description" class="markdown"></p>
     </div>
@@ -69,6 +71,7 @@
 
 <section id="contact-form">
     <div class="header">
+        <span class="title"></span>
         <span class="icon-close" id="contact-form-close"></span>
     </div>
     <form id="contact-insert-form" action="">
@@ -100,6 +103,10 @@
             </div>
         </div>
         <div class="col-12">
+            <label><?php echo p($l->t('Address')); ?></label>
+            <input type="text" id="address">
+            </div>
+            <div class="col-12">
             <label><?php echo p($l->t('Description')); ?></label>
             <textarea id="description" rows="15"></textarea>
         </div>

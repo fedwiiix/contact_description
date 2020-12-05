@@ -9,9 +9,11 @@ OC.L10N.register(
         "Add": "Ajouter",
         "Edit": "Éditer",
         "Name": "Prénom",
+        "Address": "Addresse",
         "Description": "Description",
 
-        "Add new contact": "Ajouter le contact",
+        "Add new contact": "Ajouter un nouveau contact",
+        "Add": "Ajouter",
         "Update contact": "Modifier le contact",
         "This contact already exist.": "Ce contact existe déjà.",
         "You need to complete {name}.": "Vous devez compléter le champ {name}.",

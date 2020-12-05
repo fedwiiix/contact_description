@@ -10,7 +10,7 @@
                 <ul>
                     <li class="app-navigation-entry-utils-counter counter"></li>
                     <li class="app-navigation-entry-utils-menu-button" id="create-tag-bp">
-                        <button></button>
+                        <button class="icon-add"></button>
                     </li>
                 </ul>
             </div>

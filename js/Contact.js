@@ -5,6 +5,7 @@ class ContactClass {
             "id",
             "name",
             "lastName",
+            "address",
             "description",
             "work",
             "hobbies",
@@ -104,12 +105,16 @@ class ContactClass {
             this.prepareCreateContactForm();
         });
         $("[id=contact-form-close]").click(() => {
-            this.displayContactPreview(this.currentId);
+            if (this.currentId)
+                this.displayContactPreview(this.currentId);
         });
         $("#contact-form").submit((event) => {
             event.preventDefault();
             if (this.formCreateMode) this.create(this.getFormToContact());
             else this.update(this.getFormToContact());
+        });
+        $("#contact-form #birth").change(() => {
+            $(`#contact-form #birthNotif`).prop("checked", true);
         });
     }
 
@@ -164,9 +169,11 @@ class ContactClass {
         this.currentId = json.id;
         this.contactKey.forEach((element) => {
             if (json.hasOwnProperty(element)) {
-                if (element == "description")
+                if (element == "description") {
                     $(`#contact-preview #${element}`).html(parseMarkdown(json[element]));
-                else $(`#contact-preview #${element}`).html(json[element] || "&nbsp;");
+                } else {
+                    $(`#contact-preview #${element}`).html(json[element] || "&nbsp;");
+                }
             }
         });
         $(".header .title").html(`${json.name} ${json.lastName}`)
@@ -196,11 +203,12 @@ class ContactClass {
         this.formCreateMode = true;
         $("#contact-form").show();
         $("#contact-preview, #contact-link").hide();
-        $("#contact-form #submit").val(t(AppName, "Add new contact"));
+        $("#contact-form .title").html(t(AppName, "Add new contact"));
+        $("#contact-form #submit").val(t(AppName, "Add"));
         this.contactKey.forEach((element) => {
             $(`#contact-form #${element}`).val("");
         });
-        $(`#contact-form #birthNotif`).prop("checked", true);
+        $(`#contact-form #birthNotif`).prop("checked", false);
     }
 
     getFormToContact() {
@@ -288,6 +296,7 @@ class ContactClass {
         if ($("#contact-list .app-content-list-item").length) {
             $("#contact-list .app-content-list-item").first().click();
         } else {
+            this.currentId = null;
             this.prepareCreateContactForm();
         }
     }
@@ -388,6 +397,7 @@ class ContactClass {
         });
     }
     showLinkPreview(links) {
+        $('.link-preview').css('display', links.length ? 'block' : 'none')
         Link.showLinkPreview(links)
     }
 }

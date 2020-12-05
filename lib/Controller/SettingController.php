@@ -77,6 +77,7 @@ class SettingController extends Controller
                     "name" => is_null($contact->getName()) ? '' : $contact->getName(),
                     "last_name" => is_null($contact->getLastName()) ? '' : $contact->getLastName(),
                     "description" => is_null($contact->getDescription()) ? '' : $contact->getDescription(),
+                    "address" => is_null($contact->getAddress()) ? '' : $contact->getAddress(),
                     "work" => is_null($contact->getWork()) ? '' : $contact->getWork(),
                     "hobbies" => is_null($contact->getHobbies()) ? '' : $contact->getHobbies(),
                     "birth" => is_null($contact->getBirth()) ? '' : $contact->getBirth(),
@@ -149,12 +150,13 @@ class SettingController extends Controller
                     $contact->setName($c->name);
                     $contact->setLastName($c->last_name);
                     $contact->setDescription($c->description);
+                    $contact->setAddress($c->address);
                     $contact->setWork($c->work);
                     $contact->setHobbies($c->hobbies);
                     $contact->setBirth($c->birth);
                     $contact->setBirthNotif($c->birth_notif);
                     $contact->setUserId($this->userId);
-                    $contact->setCreated($date->getTimestamp());
+                    $contact->setUpdated($date->getTimestamp());
 
                     $rep = $this->contactMapper->insert($contact);
                 } catch (Exception $e) {

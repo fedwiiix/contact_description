@@ -81,6 +81,7 @@ class ContactController extends Controller
      * @param string $name
      * @param string $lastName
      * @param string $description
+     * @param string $address
      * @param string $work
      * @param string $hobbies
      * @param string $birth
@@ -90,6 +91,7 @@ class ContactController extends Controller
         string $name,
         string $lastName,
         string $description,
+        string $address,
         string $work,
         string $hobbies,
         string $birth,
@@ -104,12 +106,13 @@ class ContactController extends Controller
         $contact->setName($name);
         $contact->setLastName($lastName);
         $contact->setDescription($description);
+        $contact->setAddress($address);
         $contact->setWork($work);
         $contact->setHobbies($hobbies);
         $contact->setBirth($birth);
         $contact->setBirthNotif($birthNotif);
         $contact->setUserId($this->userId);
-        $contact->setCreated($date->getTimestamp());
+        $contact->setUpdated($date->getTimestamp());
 
         try {
             return new DataResponse($this->mapper->insert($contact));
@@ -125,6 +128,7 @@ class ContactController extends Controller
      * @param string $name
      * @param string $lastName
      * @param string $description
+     * @param string $address
      * @param string $work
      * @param string $hobbies
      * @param string $birth
@@ -135,6 +139,7 @@ class ContactController extends Controller
         string $name,
         string $lastName,
         string $description,
+        string $address,
         string $work,
         string $hobbies,
         string $birth,
@@ -153,12 +158,13 @@ class ContactController extends Controller
         $contact->setName($name);
         $contact->setLastName($lastName);
         $contact->setDescription($description);
+        $contact->setAddress($address);
         $contact->setWork($work);
         $contact->setHobbies($hobbies);
         $contact->setBirth($birth);
         $contact->setBirthNotif($birthNotif);
         $contact->setUserId($this->userId);
-        $contact->setCreated($date->getTimestamp());
+        $contact->setUpdated($date->getTimestamp());
         return new DataResponse($this->mapper->update($contact));
     }
 

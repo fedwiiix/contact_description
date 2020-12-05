@@ -22,6 +22,7 @@ class ContactMapper extends QBMapper
             ->addSelect('hobbies')
             ->addSelect('birth')
             ->addSelect('birth_notif')
+            ->addSelect('address')
             ->addSelect('description')
             ->from($this->getTableName())
             ->where($qb->expr()->eq('id', $qb->createNamedParameter($id)))
@@ -37,10 +38,10 @@ class ContactMapper extends QBMapper
         $qb->select('id')
             ->addSelect('name')
             ->addSelect('last_name')
-            ->addSelect('created')
+            ->addSelect('updated')
             ->from($this->getTableName())
             ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
-            ->orderBy('created', 'ASC');
+            ->orderBy('updated', 'ASC');
 
         return $this->findEntities($qb);
     }
@@ -56,10 +57,11 @@ class ContactMapper extends QBMapper
             ->addSelect('hobbies')
             ->addSelect('birth')
             ->addSelect('birth_notif')
+            ->addSelect('address')
             ->addSelect('description')
             ->from($this->getTableName())
             ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
-            ->orderBy('created', 'ASC');
+            ->orderBy('updated', 'ASC');
 
         return $this->findEntities($qb);
     }

@@ -137,12 +137,14 @@ label {
 
 #contact-form input:not([type="checkbox"]),
 #contact-form textarea {
-    width: 95%;
+    width: 98%;
+    margin: 5px 1%;
 }
 
 #contact-form textarea {
     resize: vertical;
-    width: 100%;
+    width: 98%;
+    margin: 5px 1%;
 }
 
 #contact-preview p {
@@ -170,7 +172,7 @@ label {
 #preview-menu {
     position: absolute;
     right: calc(5% + 22px);
-    top: calc(5% + 55px);
+    margin-top: 3px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -180,9 +182,6 @@ label {
         min-width: 100%;
         position: relative;
         background-color: var(--color-main-background);
-    }
-    #preview-menu {
-        top: calc(5% + 30px);
     }
 }
 

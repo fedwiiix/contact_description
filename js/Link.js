@@ -22,6 +22,10 @@ class LinkClass {
             this.resetForm()
         });
 
+        $("#link-birth").change(() => {
+            $(`#link-birthNotif`).prop("checked", true);
+        });
+
         $("#contact-link-form").submit((event) => {
             event.preventDefault();
             let inputName = $("#link-assign").val();
@@ -30,7 +34,7 @@ class LinkClass {
                 birthNotif = 0;
             if (type == 0) {
                 birth = $("#link-birth").val();
-                birthNotif = $("#link-birthNotif").prop("checked") ? 1 : 0;
+                birthNotif = $("#link-birthNotif").prop("checked") && birth != "" ? 1 : 0;
             }
             let json = {
                 contactId: Contact.getCurrentId(),
@@ -55,7 +59,7 @@ class LinkClass {
     resetForm() {
         $("#link-assign, #link-birth").val('');
         $("#link-select").val(0);
-        $("#link-birthNotif").prop("checked", true)
+        $("#link-birthNotif").prop("checked", false)
         $("#contact-link #submit").val(t(AppName, "Add link"))
         this.updateLinkSelect()
         this.updateId = -1;

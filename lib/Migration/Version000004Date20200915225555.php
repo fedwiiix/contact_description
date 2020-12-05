@@ -7,7 +7,7 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version000004Date20200911225555 extends SimpleMigrationStep
+class Version000004Date20200915225555 extends SimpleMigrationStep
 {
 
     /**
@@ -55,10 +55,14 @@ class Version000004Date20200911225555 extends SimpleMigrationStep
                 'notnull' => true,
                 'length' => 1,
             ]);
+            $table->addColumn('address', 'string', [
+                'notnull' => true,
+                'length' => 200,
+            ]);
             $table->addColumn('description', 'text', [
                 'notnull' => true,
             ]);
-            $table->addColumn('created', 'integer', [
+            $table->addColumn('updated', 'integer', [
                 'notnull' => true,
                 'length' => 4,
                 'default' => 0,

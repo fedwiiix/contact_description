@@ -14,11 +14,12 @@ class Contact extends Entity implements JsonSerializable
     protected $name;
     protected $lastName;
     protected $description;
+    protected $address;
     protected $work;
     protected $hobbies;
     protected $birth;
     protected $birthNotif;
-    protected $created;
+    protected $updated;
 
     public function jsonSerialize()
     {
@@ -28,11 +29,12 @@ class Contact extends Entity implements JsonSerializable
             'name' => $this->name,
             'lastName' => $this->lastName,
             'description' => $this->description,
+            'address' => $this->address,
             'work' => $this->work,
             'hobbies' => $this->hobbies,
             'birth' => $this->birth,
             'birthNotif' => $this->birthNotif,
-            'created' => $this->created,
+            'updated' => $this->updated,
         ];
     }
 }
