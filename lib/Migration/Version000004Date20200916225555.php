@@ -7,7 +7,7 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version000004Date20200915225555 extends SimpleMigrationStep
+class Version000004Date20200916225555 extends SimpleMigrationStep
 {
 
     /**
