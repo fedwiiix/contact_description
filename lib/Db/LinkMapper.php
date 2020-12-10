@@ -54,8 +54,6 @@ class LinkMapper extends QBMapper
             ->from($this->getTableName())
             ->where($qb->expr()->eq('contact_id', $qb->createNamedParameter($contactId)))
             ->andWhere($qb->expr()->eq('contact_id_bis', $qb->createNamedParameter($contactIdBis)))
-            //->orWhere($qb->expr()->eq('contact_id', $qb->createNamedParameter($contactIdBis)))
-            //->andWhere($qb->expr()->eq('contact_id_bis', $qb->createNamedParameter($contactId)))
             ;
 
         return $this->findEntity($qb);
