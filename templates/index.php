@@ -1,5 +1,5 @@
 <?php
-script('people', ['script','autocomplete','Tag','Contact','TagAssign','Settings','Link']);
+script('people', ['autocomplete','Tag','Contact','TagAssign','Settings','Link','script']);
 style('people', ['style', 'components','markdown']);
 ?>
 
