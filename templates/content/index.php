@@ -44,12 +44,16 @@
     <div class="col-6">
         <label><?php echo p($l->t('Work')); ?></label>
         <p id="work"></p>
-        <label><?php echo p($l->t('Birth')); ?></label>
-        <p id="birth"></p>
     </div>
     <div class="col-6">
         <label><?php echo p($l->t('Hobbies')); ?></label>
         <p id="hobbies"></p>
+    </div>
+    <div class="col-6">
+        <label><?php echo p($l->t('Birth')); ?></label>
+        <p id="birth"></p>
+    </div>
+    <div class="col-6">
         <div id="checkboxNotif">
             <input type="checkbox" id="birthNotif-preview" class="checkbox" disabled>
             <label for="birthNotif-preview"><?php echo p($l->t('Birthday notif')); ?></label>
